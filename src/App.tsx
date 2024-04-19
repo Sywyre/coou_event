@@ -1,5 +1,11 @@
+import RegisterPage from "./Pages/Auth/RegisterPage";
+
 const App = () => {
-  return <div>COOU Events</div>;
+  return (
+    <>
+      <RegisterPage />
+    </>
+  );
 };
 
 export default App;
