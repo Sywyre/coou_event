@@ -91,7 +91,7 @@ const LoginPage = () => {
               Login
             </CardTitle>
             <CardDescription className="text-balance text-muted-foreground">
-              Enter your information to create an account
+            Enter your details to Login
             </CardDescription>
           </CardHeader>
           <CardContent>
