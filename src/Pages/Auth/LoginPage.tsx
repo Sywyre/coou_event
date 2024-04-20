@@ -107,13 +107,13 @@ const LoginPage = () => {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="lg:text-lg">Email</FormLabel>
+                          <FormLabel className="lg:text-base">Email</FormLabel>
                           <FormControl>
                             <Input
                               placeholder="Enter a valid Email"
                               {...field}
                               type="email"
-                              className="lg:text-lg"
+                              className="lg:text-base"
                             />
                           </FormControl>
                           <FormMessage />
@@ -127,13 +127,13 @@ const LoginPage = () => {
                       name="password"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="lg:text-lg">Password</FormLabel>
+                          <FormLabel className="lg:text-base">Password</FormLabel>
                           <FormControl>
                             <Input
                               placeholder="Enter a password"
                               {...field}
                               type="password"
-                              className="lg:text-lg"
+                              className="lg:text-base"
                             />
                           </FormControl>
                           <FormMessage />

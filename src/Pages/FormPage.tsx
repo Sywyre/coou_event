@@ -21,6 +21,8 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { base } from "@/utils";
+import { Toaster } from "@/components/ui/toaster";
+import { useToast } from "@/components/ui/use-toast";
 
 const schema = z.object({
   surname: z.string().min(2).max(20),
@@ -30,6 +32,7 @@ const schema = z.object({
 
 const FormPage = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -59,12 +62,20 @@ const FormPage = () => {
         if (err) {
           console.error(err);
           //setToast("error");
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: `Submission failed`,
+          });
           return;
         }
         records?.forEach(function () {
           //reset();
         });
-        // setToast("success");
+        toast({
+          title: "Congrats🎉",
+          description: `Submitted Successfully`,
+        });
         setIsLoading(false);
       }
     );
@@ -73,6 +84,7 @@ const FormPage = () => {
   return (
     <div className="w-full h-dvh font-bodyFont flex justify-center items-center">
       <Card className="grid w-[400px] mx-4 xl:mx-auto lg:w-[500px]">
+        <Toaster />
         <CardHeader className="grid text-center">
           <CardTitle className="font-bold text-3xl font-headingFont">
             COOU Staff Form
@@ -94,12 +106,12 @@ const FormPage = () => {
                     name="surname"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="lg:text-lg">Surname</FormLabel>
+                        <FormLabel className="lg:text-base">Surname</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="Enter a surname"
                             {...field}
-                            className="lg:text-lg"
+                            className="lg:text-base"
                           />
                         </FormControl>
                         <FormMessage />
@@ -113,14 +125,14 @@ const FormPage = () => {
                     name="othername"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="lg:text-lg">
+                        <FormLabel className="lg:text-base">
                           Other Names
                         </FormLabel>
                         <FormControl>
                           <Input
                             placeholder="Enter your other names"
                             {...field}
-                            className="lg:text-lg"
+                            className="lg:text-base"
                           />
                         </FormControl>
                         <FormMessage />
@@ -134,12 +146,12 @@ const FormPage = () => {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="lg:text-lg">Email</FormLabel>
+                        <FormLabel className="lg:text-base">Email</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="Enter your Email"
                             {...field}
-                            className="lg:text-lg"
+                            className="lg:text-base"
                           />
                         </FormControl>
                         <FormMessage />
