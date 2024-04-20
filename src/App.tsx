@@ -1,9 +1,8 @@
-import RegisterPage from "./Pages/Auth/RegisterPage";
 
 const App = () => {
   return (
     <>
-      <RegisterPage />
+      <div>App</div>
     </>
   );
 };
