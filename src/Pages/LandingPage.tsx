@@ -7,7 +7,7 @@ const LandingPage = () => {
       <h1 className="text-xl lg:text-2xl xl:text-3xl font-bold text-center font-headingFont">
         COOU Staff Data collection
       </h1>
-      <Link to="/personal">
+      <Link to="/form">
         <Button className="m-4">Add new Entry</Button>
       </Link>
     </div>

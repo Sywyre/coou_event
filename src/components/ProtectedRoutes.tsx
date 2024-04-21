@@ -13,7 +13,7 @@ const PrivateRoute = () => {
         <MobileNav />
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-0 lg:grid lg:grid-cols-[1fr_200px]">
           <Outlet />
-          <div className="border-l bg-muted/40"></div>
+          <div className="lg:border-l lg:bg-muted/40"></div>
         </main>
       </div>
     </div>

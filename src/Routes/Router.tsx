@@ -1,6 +1,5 @@
-import Address from "@/Pages/EmploymentDetails";
 import LoginPage from "@/Pages/Auth/LoginPage";
-import FormPage from "@/Pages/PersonalDetails";
+import FormPage from "@/Pages/Form";
 import LandingPage from "@/Pages/LandingPage";
 import ProtectedRoutes from "@/components/ProtectedRoutes";
 import { createBrowserRouter } from "react-router-dom";
@@ -12,8 +11,7 @@ const router = createBrowserRouter([
     path: "/",
     children: [
       { index: true, element: <LandingPage /> },
-      { path: "/personal", element: <FormPage /> },
-      { path: "/employment", element: <Address /> },
+      { path: "/form", element: <FormPage /> },
     ],
   },
 ]);

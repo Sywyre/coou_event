@@ -56,14 +56,11 @@ const LoginPage = () => {
     signInWithEmailAndPassword(auth, values.email, values.password)
       .then((userCredential) => {
         const user: any = userCredential.user;
-        console.log(user.accessToken);
         localStorage.setItem("jwt", user.accessToken);
         setIsLoading(false);
         navigate("/");
       })
       .catch((error) => {
-        const errorCode = error.code;
-        console.log(errorCode);
         setIsLoading(false);
         toast({
           variant: "destructive",
