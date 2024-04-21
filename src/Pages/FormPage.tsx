@@ -17,7 +17,6 @@ import {
   Card,
   CardHeader,
   CardTitle,
-  CardDescription,
   CardContent,
 } from "@/components/ui/card";
 import { base } from "@/utils";
@@ -88,11 +87,8 @@ const FormPage = () => {
         <Toaster />
         <CardHeader className="grid text-center">
           <CardTitle className="font-bold text-3xl font-headingFont">
-            COOU Staff Form
+          COOU Staff Data
           </CardTitle>
-          <CardDescription className="text-balance text-muted-foreground">
-            Enter your information correctly
-          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4">
