@@ -24,6 +24,7 @@ import { base } from "@/utils";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 
+
 const schema = z.object({
   surname: z.string().min(2).max(20),
   othername: z.string().min(2).max(50),
@@ -152,6 +153,7 @@ const FormPage = () => {
                             placeholder="Enter your Email"
                             {...field}
                             className="lg:text-base"
+                            type="email"
                           />
                         </FormControl>
                         <FormMessage />
