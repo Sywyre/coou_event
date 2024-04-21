@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/form";
 import { useNavigate } from "react-router-dom";
 import { auth, signInWithEmailAndPassword } from "@/firebase/firebase";
-import LoginImg from "@/assets/img.png";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
@@ -76,13 +75,7 @@ const LoginPage = () => {
 
   return (
     <div className="w-full h-dvh lg:grid lg:grid-cols-2 font-bodyFont">
-      <div className="hidden bg-muted lg:block">
-        <img
-          src={LoginImg}
-          alt="Image"
-          className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-        />
-      </div>
+      <div className="hidden lg:block bg-muted/90"></div>
       <div className="flex items-center justify-center h-full">
         <Toaster />
         <Card className="grid w-auto mx-4 xl:mx-auto lg:w-[500px]">
@@ -91,7 +84,7 @@ const LoginPage = () => {
               Login
             </CardTitle>
             <CardDescription className="text-balance text-muted-foreground">
-            Enter your details to Login
+              Enter your details to Login
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -127,7 +120,9 @@ const LoginPage = () => {
                       name="password"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="lg:text-base">Password</FormLabel>
+                          <FormLabel className="lg:text-base">
+                            Password
+                          </FormLabel>
                           <FormControl>
                             <Input
                               placeholder="Enter a password"

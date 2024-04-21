@@ -1,5 +1,6 @@
 import LoginPage from "@/Pages/Auth/LoginPage";
 import FormPage from "@/Pages/FormPage";
+import LandingPage from "@/Pages/LandingPage";
 import ProtectedRoutes from "@/components/ProtectedRoutes";
 import { createBrowserRouter } from "react-router-dom";
 
@@ -8,7 +9,10 @@ const router = createBrowserRouter([
   {
     element: <ProtectedRoutes />,
     path: "/",
-    children: [{ index: true, element: <FormPage /> }],
+    children: [
+      { index: true, element: <LandingPage /> },
+      { path: "/form", element: <FormPage /> },
+    ],
   },
 ]);
 
