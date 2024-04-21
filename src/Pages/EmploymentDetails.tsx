@@ -18,28 +18,26 @@ import {
   CardHeader,
   CardTitle,
   CardContent,
+  CardDescription,
 } from "@/components/ui/card";
 import { base } from "@/utils";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
-
+import { Progress } from "@/components/ui/progress";
 
 const schema = z.object({
-  surname: z.string().min(2).max(20),
-  othername: z.string().min(2).max(50),
-  email: z.string().email(),
+  staffId: z.string(),
 });
 
-const FormPage = () => {
+const Address = () => {
   const [isLoading, setIsLoading] = useState(false);
+
+  const progress = (11 / 25) * 100;
+
   const { toast } = useToast();
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      surname: "",
-      othername: "",
-      email: "",
-    },
+    defaultValues: {},
   });
 
   const onSubmit = (values: z.infer<typeof schema>) => {
@@ -47,9 +45,7 @@ const FormPage = () => {
     setIsLoading(true);
 
     const payload = {
-      surname: values.surname,
-      other_names: values.othername,
-      email: values.email,
+      staff_id: values.staffId,
     };
 
     base("Form").create(
@@ -87,8 +83,11 @@ const FormPage = () => {
         <Toaster />
         <CardHeader className="grid text-center">
           <CardTitle className="font-bold text-3xl font-headingFont">
-          COOU Staff Data
+            COOU Staff Data
           </CardTitle>
+          <CardDescription className="flex justify-center">
+            <Progress value={progress} className="w-full" />
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4">
@@ -100,56 +99,17 @@ const FormPage = () => {
                 <div className="grid gap-2">
                   <FormField
                     control={form.control}
-                    name="surname"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="lg:text-base">Surname</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter a surname"
-                            {...field}
-                            className="lg:text-base"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <FormField
-                    control={form.control}
-                    name="othername"
+                    name="staffId"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="lg:text-base">
-                          Other Names
+                          Staff Id
                         </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Enter your other names"
+                            placeholder="Enter a Staff Id"
                             {...field}
                             className="lg:text-base"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="lg:text-base">Email</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter your Email"
-                            {...field}
-                            className="lg:text-base"
-                            type="email"
                           />
                         </FormControl>
                         <FormMessage />
@@ -175,4 +135,4 @@ const FormPage = () => {
   );
 };
 
-export default FormPage;
+export default Address;

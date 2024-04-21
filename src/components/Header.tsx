@@ -21,11 +21,11 @@ const Header = () => {
               Home
             </Link>
             <Link
-              to="/form"
+              to="/personal"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
             >
               <FileText className="h-4 w-4" />
-              Fill up a form
+              Add new Entry
             </Link>
           </nav>
         </div>

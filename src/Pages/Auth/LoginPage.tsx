@@ -78,7 +78,7 @@ const LoginPage = () => {
       <div className="hidden lg:block bg-muted/90"></div>
       <div className="flex items-center justify-center h-full">
         <Toaster />
-        <Card className="grid w-auto mx-4 xl:mx-auto lg:w-[500px]">
+        <Card className="grid w-[400px] mx-4 xl:mx-auto lg:w-[500px]">
           <CardHeader className="grid text-center">
             <CardTitle className="font-bold text-3xl font-headingFont">
               Login

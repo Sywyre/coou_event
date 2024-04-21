@@ -5,10 +5,10 @@ const LandingPage = () => {
   return (
     <div className="flex flex-col justify-center items-center h-full">
       <h1 className="text-xl lg:text-2xl xl:text-3xl font-bold text-center font-headingFont">
-        Welcome to COOU Staff Data collection page
+        COOU Staff Data collection
       </h1>
-      <Link to="/form">
-        <Button className="m-4">Fill up a form</Button>
+      <Link to="/personal">
+        <Button className="m-4">Add new Entry</Button>
       </Link>
     </div>
   );
