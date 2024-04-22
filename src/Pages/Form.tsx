@@ -30,6 +30,7 @@ import {
 import { base } from "@/utils";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
 //import { Progress } from "@/components/ui/progress";
 
 const schema = z.object({
@@ -63,6 +64,7 @@ const FormPage = () => {
   // const progressCal = (progress / 25) * 100;
 
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -110,6 +112,7 @@ const FormPage = () => {
             title: "Uh oh! Something went wrong.",
             description: `Try again`,
           });
+          setIsLoading(false);
           return;
         }
         records?.forEach(function () {
@@ -120,6 +123,7 @@ const FormPage = () => {
           description: `Submitted Successfully`,
         });
         setIsLoading(false);
+        setTimeout(() => navigate("/"), 3000);
       }
     );
   };
