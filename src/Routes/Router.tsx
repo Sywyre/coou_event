@@ -1,10 +1,12 @@
 import LoginPage from "@/Pages/Auth/LoginPage";
+import RegisterPage from "@/Pages/Auth/RegisterPage";
 import FormPage from "@/Pages/Form";
 import LandingPage from "@/Pages/LandingPage";
 import ProtectedRoutes from "@/components/ProtectedRoutes";
 import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
+  { path: "/register", element: <RegisterPage /> },
   { path: "/login", element: <LoginPage /> },
   {
     element: <ProtectedRoutes />,

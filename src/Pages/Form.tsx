@@ -44,6 +44,7 @@ const schema = z.object({
   state: z.string(),
   lga: z.string(),
   town: z.string(),
+  staff_id: z.string(),
 });
 
 const FormPage = () => {

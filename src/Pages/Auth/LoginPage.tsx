@@ -18,7 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { auth, signInWithEmailAndPassword } from "@/firebase/firebase";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
@@ -51,7 +51,7 @@ const LoginPage = () => {
     },
   });
 
-  const handleRegister = (values: formData) => {
+  const handleLogin = (values: formData) => {
     setIsLoading(true);
     signInWithEmailAndPassword(auth, values.email, values.password)
       .then((userCredential) => {
@@ -75,7 +75,7 @@ const LoginPage = () => {
       <div className="hidden lg:block bg-muted/90"></div>
       <div className="flex items-center justify-center h-full">
         <Toaster />
-        <Card className="grid w-[400px] mx-4 xl:mx-auto lg:w-[500px]">
+        <Card className="mx-4 grid w-[400px] lg:w-[500px] xl:mx-auto">
           <CardHeader className="grid text-center">
             <CardTitle className="font-bold text-3xl font-headingFont">
               Login
@@ -88,7 +88,7 @@ const LoginPage = () => {
             <div className="grid gap-4">
               <Form {...form}>
                 <form
-                  onSubmit={form.handleSubmit(handleRegister)}
+                  onSubmit={form.handleSubmit(handleLogin)}
                   className="space-y-8"
                 >
                   <div className="grid gap-2">
@@ -144,6 +144,12 @@ const LoginPage = () => {
                   </Button>
                 </form>
               </Form>
+            </div>
+            <div className="mt-4 text-center text-sm">
+              Don't have an account?{" "}
+              <Link to="/register" className="underline">
+                Create an Account
+              </Link>
             </div>
           </CardContent>
         </Card>
