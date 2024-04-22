@@ -51,6 +51,9 @@ const schema = z.object({
   lga: z.string(),
   town: z.string(),
   staff_id: z.string(),
+  faculty: z.string(),
+  department: z.string(),
+  unit: z.string(),
   date_of_assumption_of_duty: z.string(),
   date_of_confirmation_of_employment: z.string(),
   present_rank_or_grade_level: z.string(),
@@ -90,6 +93,10 @@ const FormPage = () => {
       state_of_origin: values.state,
       lga: values.lga,
       town: values.town,
+      staff_id: values.staff_id,
+      faculty: values.faculty,
+      department: values.department,
+      unit: values.unit,
       date_of_assumption_of_duty: values.date_of_assumption_of_duty,
       date_of_confirmation_of_employment:
         values.date_of_confirmation_of_employment,
@@ -361,11 +368,68 @@ const FormPage = () => {
                                 render={({ field }) => (
                                   <FormItem>
                                     <FormLabel className="lg:text-base">
-                                      Town
+                                      Staff Id
                                     </FormLabel>
                                     <FormControl>
                                       <Input
                                         placeholder="Enter your Staff Id"
+                                        {...field}
+                                        className="lg:text-base"
+                                      />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                              <FormField
+                                control={form.control}
+                                name="faculty"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel className="lg:text-base">
+                                      Faculty
+                                    </FormLabel>
+                                    <FormControl>
+                                      <Input
+                                        placeholder="Enter your Faculty"
+                                        {...field}
+                                        className="lg:text-base"
+                                      />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                              <FormField
+                                control={form.control}
+                                name="department"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel className="lg:text-base">
+                                      Department
+                                    </FormLabel>
+                                    <FormControl>
+                                      <Input
+                                        placeholder="Enter your Department"
+                                        {...field}
+                                        className="lg:text-base"
+                                      />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                              <FormField
+                                control={form.control}
+                                name="unit"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel className="lg:text-base">
+                                      Unit
+                                    </FormLabel>
+                                    <FormControl>
+                                      <Input
+                                        placeholder="Enter your Unit"
                                         {...field}
                                         className="lg:text-base"
                                       />
