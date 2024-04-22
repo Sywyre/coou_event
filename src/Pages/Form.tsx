@@ -32,10 +32,15 @@ import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 //import { Progress } from "@/components/ui/progress";
 
-
 const schema = z.object({
-  surname: z.string().min(2).max(20),
-  othername: z.string().min(2).max(50),
+  surname: z
+    .string()
+    .min(2, { message: "Surname must contain at least 2 characters" })
+    .max(20),
+  othername: z
+    .string()
+    .min(2, { message: "Other names must contain at least 2 characters" })
+    .max(50),
   email: z.string().email(),
   nin: z.string(),
   phoneNumber: z.string(),
@@ -45,6 +50,10 @@ const schema = z.object({
   lga: z.string(),
   town: z.string(),
   staff_id: z.string(),
+  date_of_assumption_of_duty: z.string(),
+  date_of_confirmation_of_employment: z.string(),
+  present_rank_or_grade_level: z.string(),
+  last_promotion_date: z.string(),
 });
 
 const FormPage = () => {
@@ -79,6 +88,11 @@ const FormPage = () => {
       state_of_origin: values.state,
       lga: values.lga,
       town: values.town,
+      date_of_assumption_of_duty: values.date_of_assumption_of_duty,
+      date_of_confirmation_of_employment:
+        values.date_of_confirmation_of_employment,
+      present_rank_or_grade_level: values.present_rank_or_grade_level,
+      last_promotion_date: values.last_promotion_date,
     };
 
     base("Form").create(
@@ -251,16 +265,6 @@ const FormPage = () => {
                                   </FormItem>
                                 )}
                               />
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </div>
-                    </CarouselItem>
-                    <CarouselItem>
-                      <div className="p-1">
-                        <Card>
-                          <CardContent className="flex  p-6">
-                            <div className="flex flex-col gap-5 w-full">
                               <FormField
                                 control={form.control}
                                 name="address"
@@ -329,6 +333,111 @@ const FormPage = () => {
                                     <FormControl>
                                       <Input
                                         placeholder="Enter your town"
+                                        {...field}
+                                        className="lg:text-base"
+                                      />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    </CarouselItem>
+                    <CarouselItem>
+                      <div className="p-1">
+                        <Card>
+                          <CardContent className="flex  p-6">
+                            <div className="flex flex-col gap-5 w-full">
+                              <FormField
+                                control={form.control}
+                                name="staff_id"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel className="lg:text-base">
+                                      Town
+                                    </FormLabel>
+                                    <FormControl>
+                                      <Input
+                                        placeholder="Enter your Staff Id"
+                                        {...field}
+                                        className="lg:text-base"
+                                      />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                              <FormField
+                                control={form.control}
+                                name="date_of_assumption_of_duty"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel className="lg:text-base">
+                                      Date of Assumption of Duty
+                                    </FormLabel>
+                                    <FormControl>
+                                      <Input
+                                        placeholder="Enter the date you resumed work"
+                                        {...field}
+                                        className="lg:text-base"
+                                      />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                              <FormField
+                                control={form.control}
+                                name="date_of_confirmation_of_employment"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel className="lg:text-base">
+                                      Date of Confirmation of Employment
+                                    </FormLabel>
+                                    <FormControl>
+                                      <Input
+                                        placeholder="Enter the date you confirmed employment"
+                                        {...field}
+                                        className="lg:text-base"
+                                      />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                              <FormField
+                                control={form.control}
+                                name="present_rank_or_grade_level"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel className="lg:text-base">
+                                      Present Rank/Grade Level
+                                    </FormLabel>
+                                    <FormControl>
+                                      <Input
+                                        placeholder="Enter your present Rank"
+                                        {...field}
+                                        className="lg:text-base"
+                                      />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                              <FormField
+                                control={form.control}
+                                name="last_promotion_date"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel className="lg:text-base">
+                                      Last Promotion Date
+                                    </FormLabel>
+                                    <FormControl>
+                                      <Input
+                                        placeholder="Enter your Last Promotion Date"
                                         {...field}
                                         className="lg:text-base"
                                       />
