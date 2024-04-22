@@ -18,7 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { auth, signInWithEmailAndPassword } from "@/firebase/firebase";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
@@ -152,12 +152,12 @@ const LoginPage = () => {
                 </form>
               </Form>
             </div>
-            <div className="mt-4 text-center text-sm">
+            {/* <div className="mt-4 text-center text-sm">
               Don't have an account?{" "}
               <Link to="/register" className="underline">
                 Create an Account
               </Link>
-            </div>
+            </div> */}
           </CardContent>
         </Card>
       </div>

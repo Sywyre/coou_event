@@ -27,10 +27,31 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { base } from "@/utils";
+import { base, states, units } from "@/utils";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+// import {states} from '@/utils'
+
 //import { Progress } from "@/components/ui/progress";
 
 const schema = z.object({
@@ -54,8 +75,6 @@ const schema = z.object({
   faculty: z.string(),
   department: z.string(),
   unit: z.string(),
-  date_of_assumption_of_duty: z.string(),
-  date_of_confirmation_of_employment: z.string(),
   present_rank_or_grade_level: z.string(),
   last_promotion_date: z.string(),
 });
@@ -68,6 +87,9 @@ const FormPage = () => {
 
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [date, setDate] = useState<Date>();
+  const [dutyDate, setDutyDate] = useState<Date>();
+  const [employmentDate, setEmploymentDate] = useState<Date>();
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -89,6 +111,7 @@ const FormPage = () => {
       nin: values.nin,
       phone_number: values.phoneNumber,
       gender: values.gender,
+      dob: date?.toDateString(),
       contact_address: values.address,
       state_of_origin: values.state,
       lga: values.lga,
@@ -97,9 +120,8 @@ const FormPage = () => {
       faculty: values.faculty,
       department: values.department,
       unit: values.unit,
-      date_of_assumption_of_duty: values.date_of_assumption_of_duty,
-      date_of_confirmation_of_employment:
-        values.date_of_confirmation_of_employment,
+      date_of_assumption_of_duty: dutyDate?.toDateString(),
+      date_of_confirmation_of_employment: employmentDate?.toDateString(),
       present_rank_or_grade_level: values.present_rank_or_grade_level,
       last_promotion_date: values.last_promotion_date,
     };
@@ -232,6 +254,7 @@ const FormPage = () => {
                                         placeholder="Enter your NIN"
                                         {...field}
                                         className="lg:text-base"
+                                        type="number"
                                       />
                                     </FormControl>
                                     <FormMessage />
@@ -257,21 +280,71 @@ const FormPage = () => {
                                   </FormItem>
                                 )}
                               />
+                              <div className="grid gap-3">
+                                <Label htmlFor="dob" className="text-base">
+                                  Date of Birth
+                                </Label>
+                                <Popover>
+                                  <PopoverTrigger asChild>
+                                    <FormControl id="dob" className="!w-full">
+                                      <Button
+                                        variant={"outline"}
+                                        className={cn(
+                                          "w-[240px] justify-start text-left font-normal",
+                                          !date && "text-muted-foreground"
+                                        )}
+                                      >
+                                        <CalendarIcon className="mr-2 h-4 w-4" />
+                                        {date ? (
+                                          format(date, "PPP")
+                                        ) : (
+                                          <span>Pick a date</span>
+                                        )}
+                                      </Button>
+                                    </FormControl>
+                                  </PopoverTrigger>
+                                  <PopoverContent
+                                    align="start"
+                                    className=" w-auto p-0"
+                                  >
+                                    <Calendar
+                                      mode="single"
+                                      captionLayout="dropdown-buttons"
+                                      selected={date}
+                                      onSelect={setDate}
+                                      fromYear={1960}
+                                      toYear={2030}
+                                    />
+                                  </PopoverContent>
+                                </Popover>
+                              </div>
                               <FormField
                                 control={form.control}
                                 name="gender"
                                 render={({ field }) => (
                                   <FormItem>
-                                    <FormLabel className="lg:text-base">
-                                      Gender
-                                    </FormLabel>
-                                    <FormControl>
-                                      <Input
-                                        placeholder="Enter your Gender"
-                                        {...field}
-                                        className="lg:text-base"
-                                      />
-                                    </FormControl>
+                                    <FormLabel>Gender</FormLabel>
+                                    <Select
+                                      onValueChange={field.onChange}
+                                      defaultValue={field.value}
+                                    >
+                                      <FormControl>
+                                        <SelectTrigger className="w-full">
+                                          <SelectValue placeholder="Select a Gender" />
+                                        </SelectTrigger>
+                                      </FormControl>
+                                      <SelectContent>
+                                        <SelectGroup>
+                                          <SelectItem value="male">
+                                            Male
+                                          </SelectItem>
+                                          <SelectItem value="female">
+                                            Female
+                                          </SelectItem>
+                                        </SelectGroup>
+                                      </SelectContent>
+                                    </Select>
+
                                     <FormMessage />
                                   </FormItem>
                                 )}
@@ -300,16 +373,29 @@ const FormPage = () => {
                                 name="state"
                                 render={({ field }) => (
                                   <FormItem>
-                                    <FormLabel className="lg:text-base">
-                                      State of Origin
-                                    </FormLabel>
-                                    <FormControl>
-                                      <Input
-                                        placeholder="Enter your State of Origin"
-                                        {...field}
-                                        className="lg:text-base"
-                                      />
-                                    </FormControl>
+                                    <FormLabel>State of Origin</FormLabel>
+                                    <Select
+                                      onValueChange={field.onChange}
+                                      defaultValue={field.value}
+                                    >
+                                      <FormControl>
+                                        <SelectTrigger className="w-full">
+                                          <SelectValue placeholder="Select your state of origin" />
+                                        </SelectTrigger>
+                                      </FormControl>
+                                      <SelectContent>
+                                        <SelectGroup>
+                                          {states.map((state) => (
+                                            <SelectItem
+                                              key={state.value}
+                                              value={state.value}
+                                            >
+                                              {state.name}
+                                            </SelectItem>
+                                          ))}
+                                        </SelectGroup>
+                                      </SelectContent>
+                                    </Select>
                                     <FormMessage />
                                   </FormItem>
                                 )}
@@ -361,7 +447,7 @@ const FormPage = () => {
                       <div className="p-1">
                         <Card>
                           <CardContent className="flex  p-6">
-                            <div className="flex flex-col gap-5 w-full">
+                            <div className="flex flex-col gap-4 w-full">
                               <FormField
                                 control={form.control}
                                 name="staff_id"
@@ -424,58 +510,115 @@ const FormPage = () => {
                                 name="unit"
                                 render={({ field }) => (
                                   <FormItem>
-                                    <FormLabel className="lg:text-base">
+                                    <FormLabel className="text-base">
                                       Unit
                                     </FormLabel>
-                                    <FormControl>
-                                      <Input
-                                        placeholder="Enter your Unit"
-                                        {...field}
-                                        className="lg:text-base"
-                                      />
-                                    </FormControl>
+                                    <Select
+                                      onValueChange={field.onChange}
+                                      defaultValue={field.value}
+                                    >
+                                      <FormControl>
+                                        <SelectTrigger className="w-full">
+                                          <SelectValue placeholder="Select your unit" />
+                                        </SelectTrigger>
+                                      </FormControl>
+                                      <SelectContent>
+                                        <SelectGroup>
+                                          <SelectLabel>
+                                            Non-Teaching Staff
+                                          </SelectLabel>
+                                          {units.map((unit) => (
+                                            <SelectItem
+                                              key={unit.value}
+                                              value={unit.value}
+                                              className="text-base"
+                                            >
+                                              {unit.name}
+                                            </SelectItem>
+                                          ))}
+                                        </SelectGroup>
+                                      </SelectContent>
+                                    </Select>
                                     <FormMessage />
                                   </FormItem>
                                 )}
                               />
-                              <FormField
-                                control={form.control}
-                                name="date_of_assumption_of_duty"
-                                render={({ field }) => (
-                                  <FormItem>
-                                    <FormLabel className="lg:text-base">
-                                      Date of Assumption of Duty
-                                    </FormLabel>
-                                    <FormControl>
-                                      <Input
-                                        placeholder="Enter the date you resumed work"
-                                        {...field}
-                                        className="lg:text-base"
-                                      />
+                              <div className="grid gap-3">
+                                <Label htmlFor="dod" className="text-base">
+                                  Date of Assumption of Duty
+                                </Label>
+                                <Popover>
+                                  <PopoverTrigger asChild>
+                                    <FormControl id="dod" className="!w-full">
+                                      <Button
+                                        variant={"outline"}
+                                        className={cn(
+                                          "w-[240px] justify-start text-left font-normal",
+                                          !dutyDate && "text-muted-foreground"
+                                        )}
+                                      >
+                                        <CalendarIcon className="mr-2 h-4 w-4" />
+                                        {dutyDate ? (
+                                          format(dutyDate, "PPP")
+                                        ) : (
+                                          <span>Pick a date</span>
+                                        )}
+                                      </Button>
                                     </FormControl>
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
-                              <FormField
-                                control={form.control}
-                                name="date_of_confirmation_of_employment"
-                                render={({ field }) => (
-                                  <FormItem>
-                                    <FormLabel className="lg:text-base">
-                                      Date of Confirmation of Employment
-                                    </FormLabel>
-                                    <FormControl>
-                                      <Input
-                                        placeholder="Enter the date you confirmed employment"
-                                        {...field}
-                                        className="lg:text-base"
-                                      />
+                                  </PopoverTrigger>
+                                  <PopoverContent
+                                    align="start"
+                                    className=" w-auto p-0"
+                                  >
+                                    <Calendar
+                                      mode="single"
+                                      captionLayout="dropdown-buttons"
+                                      selected={dutyDate}
+                                      onSelect={setDutyDate}
+                                      fromYear={1950}
+                                      toYear={2030}
+                                    />
+                                  </PopoverContent>
+                                </Popover>
+                              </div>
+                              <div className="grid gap-3">
+                                <Label htmlFor="doe" className="text-base">
+                                  Date of Confirmation of Employment
+                                </Label>
+                                <Popover>
+                                  <PopoverTrigger asChild>
+                                    <FormControl id="doe" className="!w-full">
+                                      <Button
+                                        variant={"outline"}
+                                        className={cn(
+                                          "w-[240px] justify-start text-left font-normal",
+                                          !employmentDate && "text-muted-foreground"
+                                        )}
+                                      >
+                                        <CalendarIcon className="mr-2 h-4 w-4" />
+                                        {employmentDate ? (
+                                          format(employmentDate, "PPP")
+                                        ) : (
+                                          <span>Pick a date</span>
+                                        )}
+                                      </Button>
                                     </FormControl>
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
+                                  </PopoverTrigger>
+                                  <PopoverContent
+                                    align="start"
+                                    className=" w-auto p-0"
+                                  >
+                                    <Calendar
+                                      mode="single"
+                                      captionLayout="dropdown-buttons"
+                                      selected={employmentDate}
+                                      onSelect={setEmploymentDate}
+                                      fromYear={1960}
+                                      toYear={2030}
+                                    />
+                                  </PopoverContent>
+                                </Popover>
+                              </div>
                               <FormField
                                 control={form.control}
                                 name="present_rank_or_grade_level"
