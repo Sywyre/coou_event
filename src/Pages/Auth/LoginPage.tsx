@@ -24,6 +24,7 @@ import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
+import COOUIMG from "@/assets/COOU-ANSU.jpg";
 
 const schema = z.object({
   email: z.string().email({ message: "Enter a Valid Email Address" }),
@@ -71,11 +72,17 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="w-full h-dvh lg:grid lg:grid-cols-2 font-bodyFont">
-      <div className="hidden lg:block bg-muted/90"></div>
+    <div className="w-full h-dvh lg:grid lg:gap-3 lg:grid-cols-2 font-bodyFont">
+      <div className="hidden lg:block">
+        <img
+          src={COOUIMG}
+          className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+          alt=""
+        />
+      </div>
       <div className="flex items-center justify-center h-full">
         <Toaster />
-        <Card className="mx-4 grid w-[400px] lg:w-[500px] xl:mx-auto">
+        <Card className="mx-4 bg-muted/40 shadow-xl grid w-[400px] lg:w-[500px] xl:mx-auto">
           <CardHeader className="grid text-center">
             <CardTitle className="font-bold text-3xl font-headingFont">
               Login
