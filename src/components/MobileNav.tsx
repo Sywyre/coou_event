@@ -55,9 +55,13 @@ const MobileNav = () => {
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="secondary" size="icon" className="rounded-full">
-            <CircleUser className="h-5 w-5" />
-            <span className="sr-only">Toggle user menu</span>
+          <Button variant="secondary" size="icon" className="rounded-full flex">
+            <CircleUser className="h-5 w-5 absolute" />
+            <span className="sr-only hidden">Toggle user menu</span>
+            <span className="relative flex h-3 w-3">
+              <span className="animate-ping absolute bottom-4 left-4 inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+              <span className="relative bottom-4 left-4 inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+            </span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
