@@ -273,7 +273,6 @@ const FormPage = () => {
                                         placeholder="Enter your NIN"
                                         {...field}
                                         className="lg:text-base"
-                                        type="number"
                                       />
                                     </FormControl>
                                     <FormMessage />
