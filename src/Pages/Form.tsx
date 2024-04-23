@@ -27,7 +27,15 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { base, states, units } from "@/utils";
+import {
+  academic,
+  base,
+  employmentTypes,
+  levels,
+  nonAcademic,
+  states,
+  units,
+} from "@/utils";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
@@ -50,8 +58,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-// import {states} from '@/utils'
-
+import { Textarea } from "@/components/ui/textarea";
 //import { Progress } from "@/components/ui/progress";
 
 const schema = z.object({
@@ -75,8 +82,14 @@ const schema = z.object({
   faculty: z.string(),
   department: z.string(),
   unit: z.string(),
-  present_rank_or_grade_level: z.string(),
-  last_promotion_date: z.string(),
+  present_rank: z.string(),
+  grade_level: z.string(),
+  academic_qualification: z.string(),
+  professional_qualification: z.string(),
+  type_of_employment: z.string(),
+  challenges: z.string(),
+  recommendations: z.string(),
+  job_description: z.string(),
 });
 
 const FormPage = () => {
@@ -90,6 +103,7 @@ const FormPage = () => {
   const [date, setDate] = useState<Date>();
   const [dutyDate, setDutyDate] = useState<Date>();
   const [employmentDate, setEmploymentDate] = useState<Date>();
+  const [lastPromoDate, setLastPromoDate] = useState<Date>();
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -122,8 +136,15 @@ const FormPage = () => {
       unit: values.unit,
       date_of_assumption_of_duty: dutyDate?.toDateString(),
       date_of_confirmation_of_employment: employmentDate?.toDateString(),
-      present_rank_or_grade_level: values.present_rank_or_grade_level,
-      last_promotion_date: values.last_promotion_date,
+      present_rank: values.present_rank,
+      grade_level: values.grade_level,
+      last_promotion_date: lastPromoDate?.toDateString(),
+      academic_qualification: values.academic_qualification,
+      professional_qualification: values.professional_qualification,
+      type_of_employment: values.type_of_employment,
+      challenges: values.challenges,
+      recommendations: values.recommendations,
+      job_description: values.job_description,
     };
 
     base("Form").create(
@@ -172,17 +193,14 @@ const FormPage = () => {
         <CardContent>
           <div className="grid gap-4">
             <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-8"
-              >
+              <form onSubmit={form.handleSubmit(onSubmit)}>
                 <Carousel className="w-full">
                   <CarouselContent>
                     <CarouselItem>
                       <div className="p-1">
                         <Card>
-                          <CardContent className="flex  p-6">
-                            <div className="flex flex-col gap-5 w-full">
+                          <CardContent className="flex p-6">
+                            <div className="flex flex-col gap-4 w-full">
                               <FormField
                                 control={form.control}
                                 name="surname"
@@ -438,16 +456,6 @@ const FormPage = () => {
                                   </FormItem>
                                 )}
                               />
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </div>
-                    </CarouselItem>
-                    <CarouselItem>
-                      <div className="p-1">
-                        <Card>
-                          <CardContent className="flex  p-6">
-                            <div className="flex flex-col gap-4 w-full">
                               <FormField
                                 control={form.control}
                                 name="staff_id"
@@ -505,6 +513,16 @@ const FormPage = () => {
                                   </FormItem>
                                 )}
                               />
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    </CarouselItem>
+                    <CarouselItem>
+                      <div className="p-1">
+                        <Card>
+                          <CardContent className="flex p-6">
+                            <div className="flex flex-col gap-4 w-full">
                               <FormField
                                 control={form.control}
                                 name="unit"
@@ -592,7 +610,8 @@ const FormPage = () => {
                                         variant={"outline"}
                                         className={cn(
                                           "w-[240px] justify-start text-left font-normal",
-                                          !employmentDate && "text-muted-foreground"
+                                          !employmentDate &&
+                                            "text-muted-foreground"
                                         )}
                                       >
                                         <CalendarIcon className="mr-2 h-4 w-4" />
@@ -621,15 +640,142 @@ const FormPage = () => {
                               </div>
                               <FormField
                                 control={form.control}
-                                name="present_rank_or_grade_level"
+                                name="present_rank"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel className="text-base">
+                                      Present Rank
+                                    </FormLabel>
+                                    <Select
+                                      onValueChange={field.onChange}
+                                      defaultValue={field.value}
+                                    >
+                                      <FormControl>
+                                        <SelectTrigger className="w-full">
+                                          <SelectValue placeholder="Select your present rank" />
+                                        </SelectTrigger>
+                                      </FormControl>
+                                      <SelectContent>
+                                        <SelectGroup>
+                                          <SelectLabel>
+                                            Non-Academic Staff
+                                          </SelectLabel>
+                                          {nonAcademic.map((rank) => (
+                                            <SelectItem
+                                              key={rank.value}
+                                              value={rank.value}
+                                              className="text-base"
+                                            >
+                                              {rank.name}
+                                            </SelectItem>
+                                          ))}
+                                        </SelectGroup>
+                                        <SelectGroup>
+                                          <SelectLabel>
+                                            Academic Staff
+                                          </SelectLabel>
+                                          {academic.map((rank) => (
+                                            <SelectItem
+                                              key={rank.value}
+                                              value={rank.value}
+                                              className="text-base"
+                                            >
+                                              {rank.name}
+                                            </SelectItem>
+                                          ))}
+                                        </SelectGroup>
+                                      </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                              <FormField
+                                control={form.control}
+                                name="grade_level"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel className="text-base">
+                                      Grade Level
+                                    </FormLabel>
+                                    <Select
+                                      onValueChange={field.onChange}
+                                      defaultValue={field.value}
+                                    >
+                                      <FormControl>
+                                        <SelectTrigger className="w-full">
+                                          <SelectValue placeholder="Select your grade level" />
+                                        </SelectTrigger>
+                                      </FormControl>
+                                      <SelectContent>
+                                        <SelectGroup>
+                                          <SelectLabel>Grade Level</SelectLabel>
+                                          {levels.map((level) => (
+                                            <SelectItem
+                                              key={level}
+                                              value={level}
+                                              className="text-base"
+                                            >
+                                              {level}
+                                            </SelectItem>
+                                          ))}
+                                        </SelectGroup>
+                                      </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                              <div className="grid gap-3">
+                                <Label htmlFor="promo" className="text-base">
+                                  Last Promotion Date
+                                </Label>
+                                <Popover>
+                                  <PopoverTrigger asChild>
+                                    <FormControl id="promo" className="!w-full">
+                                      <Button
+                                        variant={"outline"}
+                                        className={cn(
+                                          "w-[240px] justify-start text-left font-normal",
+                                          !lastPromoDate &&
+                                            "text-muted-foreground"
+                                        )}
+                                      >
+                                        <CalendarIcon className="mr-2 h-4 w-4" />
+                                        {lastPromoDate ? (
+                                          format(lastPromoDate, "PPP")
+                                        ) : (
+                                          <span>Pick a date</span>
+                                        )}
+                                      </Button>
+                                    </FormControl>
+                                  </PopoverTrigger>
+                                  <PopoverContent
+                                    align="start"
+                                    className=" w-auto p-0"
+                                  >
+                                    <Calendar
+                                      mode="single"
+                                      captionLayout="dropdown-buttons"
+                                      selected={lastPromoDate}
+                                      onSelect={setLastPromoDate}
+                                      fromYear={1950}
+                                      toYear={2030}
+                                    />
+                                  </PopoverContent>
+                                </Popover>
+                              </div>
+                              <FormField
+                                control={form.control}
+                                name="academic_qualification"
                                 render={({ field }) => (
                                   <FormItem>
                                     <FormLabel className="lg:text-base">
-                                      Present Rank/Grade Level
+                                      Academic Qualification
                                     </FormLabel>
                                     <FormControl>
                                       <Input
-                                        placeholder="Enter your present Rank"
+                                        placeholder="Enter your academic qualification"
                                         {...field}
                                         className="lg:text-base"
                                       />
@@ -640,19 +786,120 @@ const FormPage = () => {
                               />
                               <FormField
                                 control={form.control}
-                                name="last_promotion_date"
+                                name="professional_qualification"
                                 render={({ field }) => (
                                   <FormItem>
                                     <FormLabel className="lg:text-base">
-                                      Last Promotion Date
+                                      Professional Qualification
                                     </FormLabel>
                                     <FormControl>
                                       <Input
-                                        placeholder="Enter your Last Promotion Date"
+                                        placeholder="Enter your Professional qualification"
                                         {...field}
                                         className="lg:text-base"
                                       />
                                     </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                              <FormField
+                                control={form.control}
+                                name="type_of_employment"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel className="text-base">
+                                      Type of Employment
+                                    </FormLabel>
+                                    <Select
+                                      onValueChange={field.onChange}
+                                      defaultValue={field.value}
+                                    >
+                                      <FormControl>
+                                        <SelectTrigger className="w-full">
+                                          <SelectValue placeholder="Select your type of employment" />
+                                        </SelectTrigger>
+                                      </FormControl>
+                                      <SelectContent>
+                                        <SelectGroup>
+                                          <SelectLabel>
+                                            Employment Type
+                                          </SelectLabel>
+                                          {employmentTypes.map((type) => (
+                                            <SelectItem
+                                              key={type.value}
+                                              value={type.value}
+                                              className="text-base"
+                                            >
+                                              {type.name}
+                                            </SelectItem>
+                                          ))}
+                                        </SelectGroup>
+                                      </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                              <FormField
+                                control={form.control}
+                                name="challenges"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel>Challlenges</FormLabel>
+                                    <FormControl>
+                                      <Textarea
+                                        placeholder="In Your View, What do you consider to be the most significant challenges confronting the university?"
+                                        className="resize-none"
+                                        {...field}
+                                      />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                              <FormField
+                                control={form.control}
+                                name="recommendations"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel>Recommendations</FormLabel>
+                                    <FormControl>
+                                      <Textarea
+                                        placeholder="What Recommendations do you Propose for Addressing these Challenges?"
+                                        className="resize-none"
+                                        {...field}
+                                      />
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                              <FormField
+                                control={form.control}
+                                name="job_description"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel>Job Description</FormLabel>
+                                    <Select
+                                      onValueChange={field.onChange}
+                                      defaultValue={field.value}
+                                    >
+                                      <FormControl>
+                                        <SelectTrigger className="w-full">
+                                          <SelectValue placeholder="Select a Job Description" />
+                                        </SelectTrigger>
+                                      </FormControl>
+                                      <SelectContent>
+                                        <SelectGroup>
+                                          <SelectItem value="yes">
+                                            Yes
+                                          </SelectItem>
+                                          <SelectItem value="no">No</SelectItem>
+                                        </SelectGroup>
+                                      </SelectContent>
+                                    </Select>
+
                                     <FormMessage />
                                   </FormItem>
                                 )}
