@@ -18,6 +18,7 @@ const LandingPage = () => {
       <h1 className="text-xl lg:text-2xl xl:text-3xl font-bold text-center font-headingFont">
         COOU Staff Data collection
       </h1>
+      <div className="flex gap-3">
       <Dialog>
         <DialogTrigger asChild>
           <Button>Add new Entry</Button>
@@ -47,6 +48,10 @@ const LandingPage = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      <Link to='/view'>
+        <Button>View all Entries</Button>
+      </Link>
+      </div>
     </div>
   );
 };

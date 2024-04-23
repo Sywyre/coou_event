@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { CircleUser, Home, Menu, FileText } from "lucide-react";
+import { CircleUser, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -35,20 +35,20 @@ const MobileNav = () => {
               {/* Add Logo here */}
               <span className="sr-only">COOU</span>
             </Link>
-            <Link
+            {/* <Link
               to="/"
               className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
             >
               <Home className="h-5 w-5" />
               Home
-            </Link>
-            <Link
+            </Link> */}
+            {/* <Link
               to="/form"
               className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
             >
               <FileText className="h-4 w-4" />
               Add new Entry
-            </Link>
+            </Link> */}
           </nav>
         </SheetContent>
       </Sheet>

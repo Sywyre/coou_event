@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Home, Package2, FileText } from "lucide-react";
+import { Package2 } from "lucide-react";
 
 const Header = () => {
   return (
@@ -11,7 +11,7 @@ const Header = () => {
             <span className="font-headingFont">COOU</span>
           </Link>
         </div>
-        <div className="flex-1">
+        {/* <div className="flex-1">
           <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
             <Link
               to="/"
@@ -28,7 +28,7 @@ const Header = () => {
               Add new Entry
             </Link>
           </nav>
-        </div>
+        </div> */}
       </div>
     </div>
   );

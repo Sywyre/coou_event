@@ -2,6 +2,7 @@ import LoginPage from "@/Pages/Auth/LoginPage";
 // import RegisterPage from "@/Pages/Auth/RegisterPage";
 import FormPage from "@/Pages/Form";
 import LandingPage from "@/Pages/LandingPage";
+import ViewEntry from "@/Pages/ViewEntry";
 import ProtectedRoutes from "@/components/ProtectedRoutes";
 import { createBrowserRouter } from "react-router-dom";
 
@@ -13,6 +14,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <LandingPage /> },
       { path: "/form", element: <FormPage /> },
+      { path: "/view", element: <ViewEntry /> },
     ],
   },
 ]);
