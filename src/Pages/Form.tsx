@@ -921,8 +921,8 @@ const FormPage = () => {
                       </div>
                     </CarouselItem>
                   </CarouselContent>
-                  <CarouselPrevious />
-                  <CarouselNext />
+                  <CarouselPrevious variant="default" />
+                  <CarouselNext variant="default" />
                 </Carousel>
               </form>
             </Form>
