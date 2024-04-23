@@ -140,3 +140,4 @@ export const employmentTypes = [
   { name: 'Adjunct', value: 'Adjunct' },
   { name: 'Sabbatical', value: 'Sabbatical' }
 ];
+

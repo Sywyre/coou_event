@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/form";
 import { useNavigate } from "react-router-dom";
 import { auth, signInWithEmailAndPassword } from "@/firebase/firebase";
-import { Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
@@ -38,6 +38,7 @@ type formData = z.infer<typeof schema>;
 const LoginPage = () => {
   //States
   const [isLoading, setIsLoading] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   //Hooks
   const navigate = useNavigate();
@@ -70,6 +71,10 @@ const LoginPage = () => {
           description: `${error.message}`,
         });
       });
+  };
+
+  const toggleEye = () => {
+    setPasswordVisible(!passwordVisible);
   };
 
   return (
@@ -132,7 +137,14 @@ const LoginPage = () => {
                             <Input
                               placeholder="Enter a password"
                               {...field}
-                              type="password"
+                              type={passwordVisible ? '' : 'password'}
+                              icon={
+                                passwordVisible ? (
+                                  <Eye onClick={toggleEye} />
+                                ) : (
+                                  <EyeOff onClick={toggleEye} />
+                                )
+                              }
                               className="lg:text-base"
                             />
                           </FormControl>

@@ -59,6 +59,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import useFaculty from "@/hooks/useFaculty";
+
+
 //import { Progress } from "@/components/ui/progress";
 
 const schema = z.object({
@@ -98,6 +101,10 @@ const FormPage = () => {
 
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  const { faculties } = useFaculty();
+  console.log(faculties);
+ 
 
   const [isLoading, setIsLoading] = useState(false);
   const [date, setDate] = useState<Date>();
@@ -475,21 +482,34 @@ const FormPage = () => {
                                   </FormItem>
                                 )}
                               />
-                              <FormField
+                             <FormField
                                 control={form.control}
                                 name="faculty"
                                 render={({ field }) => (
                                   <FormItem>
-                                    <FormLabel className="lg:text-base">
-                                      Faculty
-                                    </FormLabel>
-                                    <FormControl>
-                                      <Input
-                                        placeholder="Enter your Faculty"
-                                        {...field}
-                                        className="lg:text-base"
-                                      />
-                                    </FormControl>
+                                    <FormLabel>Faculty</FormLabel>
+                                    <Select
+                                      onValueChange={field.onChange}
+                                      defaultValue={field.value}
+                                    >
+                                      <FormControl>
+                                        <SelectTrigger className="w-full">
+                                          <SelectValue placeholder="Select your faculty" />
+                                        </SelectTrigger>
+                                      </FormControl>
+                                      <SelectContent>
+                                        <SelectGroup>
+                                          {faculties?.map((faculty) => (
+                                            <SelectItem
+                                              key={faculty.id}
+                                              value={faculty.name}
+                                            >
+                                              {faculty.name}
+                                            </SelectItem>
+                                          ))}
+                                        </SelectGroup>
+                                      </SelectContent>
+                                    </Select>
                                     <FormMessage />
                                   </FormItem>
                                 )}
