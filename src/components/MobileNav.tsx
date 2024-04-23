@@ -1,5 +1,5 @@
-import { Link, useNavigate } from "react-router-dom";
-import { CircleUser, Menu } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { CircleUser, FileText, Home, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,6 +12,7 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const MobileNav = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.clear();
@@ -27,7 +28,7 @@ const MobileNav = () => {
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="flex flex-col">
-          <nav className="grid gap-2 text-lg font-medium">
+          <nav className="grid gap-8 text-lg font-medium">
             <Link
               to="/"
               className="flex items-center gap-2 text-lg font-semibold"
@@ -35,20 +36,34 @@ const MobileNav = () => {
               {/* Add Logo here */}
               <span className="sr-only">COOU</span>
             </Link>
-            {/* <Link
-              to="/"
-              className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-            >
-              <Home className="h-5 w-5" />
-              Home
-            </Link> */}
-            {/* <Link
-              to="/form"
-              className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-            >
-              <FileText className="h-4 w-4" />
-              Add new Entry
-            </Link> */}
+            <div>
+              <Link
+                to="/"
+                className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+              >
+                <Button
+                  variant={location.pathname === "/" ? "default" : "outline"}
+                  className="w-full flex gap-3 justify-start"
+                >
+                  <Home className="h-5 w-5" />
+                  Home
+                </Button>
+              </Link>
+              <Link
+                to="/view"
+                className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+              >
+                <Button
+                  variant={
+                    location.pathname === "/view" ? "default" : "outline"
+                  }
+                  className="w-full flex gap-3 justify-start"
+                >
+                  <FileText className="h-4 w-4" />
+                  View All Entries
+                </Button>
+              </Link>
+            </div>
           </nav>
         </SheetContent>
       </Sheet>

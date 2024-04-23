@@ -93,13 +93,14 @@ const schema = z.object({
 });
 
 const FormPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
   // const [progress, setProgress] = useState(0);
-
   // const progressCal = (progress / 25) * 100;
 
   const { toast } = useToast();
   const navigate = useNavigate();
+  
+
+  const [isLoading, setIsLoading] = useState(false);
   const [date, setDate] = useState<Date>();
   const [dutyDate, setDutyDate] = useState<Date>();
   const [employmentDate, setEmploymentDate] = useState<Date>();

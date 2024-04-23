@@ -60,6 +60,7 @@ const LoginPage = () => {
         localStorage.setItem("jwt", user.accessToken);
         setIsLoading(false);
         navigate("/");
+        console.log(user.email)
       })
       .catch((error) => {
         setIsLoading(false);

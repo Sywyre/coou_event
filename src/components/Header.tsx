@@ -1,7 +1,11 @@
-import { Link } from "react-router-dom";
-import { Package2 } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { FileText, Home, Package2 } from "lucide-react";
+import { Button } from "./ui/button";
+
 
 const Header = () => {
+  const location = useLocation();
+
   return (
     <div className="hidden border-r bg-muted/40 md:block">
       <div className="flex h-full max-h-screen flex-col gap-2">
@@ -11,24 +15,34 @@ const Header = () => {
             <span className="font-headingFont">COOU</span>
           </Link>
         </div>
-        {/* <div className="flex-1">
+        <div className="flex-1">
           <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
             <Link
               to="/"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
             >
-              <Home className="h-4 w-4" />
-              Home
+              <Button
+                variant={location.pathname === '/' ? "default" : "outline"}
+                className="w-full flex gap-3 justify-start"
+              >
+                <Home className="h-5 w-5" />
+                Home
+              </Button>
             </Link>
             <Link
-              to="/form"
+              to="/view"
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
             >
-              <FileText className="h-4 w-4" />
-              Add new Entry
+              <Button
+                variant={location.pathname === '/view' ? "default" : "outline"}
+                className="w-full flex gap-3 justify-start"
+              >
+                <FileText className="h-4 w-4" />
+                View All Entries
+              </Button>
             </Link>
           </nav>
-        </div> */}
+        </div>
       </div>
     </div>
   );
