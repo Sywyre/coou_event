@@ -58,9 +58,9 @@ const LoginPage = () => {
       .then((userCredential) => {
         const user: any = userCredential.user;
         localStorage.setItem("jwt", user.accessToken);
+        localStorage.setItem("admin_email", user.email);
         setIsLoading(false);
         navigate("/");
-        console.log(user.email)
       })
       .catch((error) => {
         setIsLoading(false);

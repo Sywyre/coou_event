@@ -98,7 +98,6 @@ const FormPage = () => {
 
   const { toast } = useToast();
   const navigate = useNavigate();
-  
 
   const [isLoading, setIsLoading] = useState(false);
   const [date, setDate] = useState<Date>();
@@ -122,6 +121,7 @@ const FormPage = () => {
     const payload = {
       surname: values.surname,
       other_names: values.othername,
+      admin_email: localStorage.getItem("admin_email")?.toString(),
       email: values.email,
       nin: values.nin,
       phone_number: values.phoneNumber,
@@ -558,6 +558,7 @@ const FormPage = () => {
                                         </SelectGroup>
                                       </SelectContent>
                                     </Select>
+
                                     <FormMessage />
                                   </FormItem>
                                 )}
