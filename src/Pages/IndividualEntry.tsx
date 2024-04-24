@@ -42,7 +42,7 @@ const IndividualEntry = () => {
   const [individualData, setIndividualData] = useState<any | RecordData>();
 
   useEffect(() => {
-    base("Form").find(`${param.id}`, function (err, record) {
+    base(import.meta.env.VITE_AIRTABLE_TABLE).find(`${param.id}`, function (err, record) {
       if (err) {
         console.error(err);
         return;

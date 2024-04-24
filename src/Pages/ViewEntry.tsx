@@ -26,7 +26,7 @@ const ViewEntry = () => {
 
 
   useEffect(() => {
-    base("Form")
+    base(import.meta.env.VITE_AIRTABLE_TABLE)
       .select({ view: "Grid view" })
       .eachPage((records, fetchNextPage) => {
         setAllFormDetails(

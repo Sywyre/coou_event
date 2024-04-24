@@ -160,7 +160,7 @@ const FormPage = () => {
       job_description: values.job_description,
     };
 
-    base("Form").create(
+    base(import.meta.env.VITE_AIRTABLE_TABLE).create(
       [
         {
           fields: payload,
