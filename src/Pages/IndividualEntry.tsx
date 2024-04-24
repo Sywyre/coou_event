@@ -1,7 +1,6 @@
 import { base } from "@/utils";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -59,11 +58,7 @@ const IndividualEntry = () => {
           <div className="grid gap-0.5">
             <CardTitle className="group flex items-center gap-2 text-lg">
               {individualData?.surname}
-              <Button
-                size="icon"
-                variant="outline"
-                className="h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100"
-              ></Button>
+               {individualData?.nin_is_valid}
             </CardTitle>
             <CardDescription>
               This entry was made on {individualData?.date_filled}

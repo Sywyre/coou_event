@@ -47,6 +47,7 @@ const ViewEntry = () => {
             <TableHead>Other Names</TableHead>
             <TableHead>Phone Number</TableHead>
             <TableHead>Gender</TableHead>
+            <TableHead>Verified</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -82,6 +83,14 @@ const ViewEntry = () => {
                   className="flex items-center px-4 w-full h-full"
                 >
                   {data.fields.gender}
+                </Link>
+              </TableCell>
+              <TableCell className="p-0 h-[71.33px]">
+                <Link
+                  to={`/view/${data.id}`}
+                  className="flex items-center px-4 w-full h-full"
+                >
+                  {data.fields.nin_is_valid}
                 </Link>
               </TableCell>
               <TableCell>

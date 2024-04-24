@@ -135,6 +135,7 @@ const FormPage = () => {
       admin_email: localStorage.getItem("admin_email")?.toString(),
       email: values.email,
       nin: values.nin,
+      nin_is_valid: ninDetails.nin ? '✅' : '',
       phone_number: values.phoneNumber,
       gender: values.gender,
       dob: date?.toDateString(),
@@ -224,6 +225,7 @@ const FormPage = () => {
                                         placeholder="Enter a surname"
                                         {...field}
                                         className="lg:text-base"
+                                        readOnly={ninDetails?.last_name?.length > 1}
                                       />
                                     </FormControl>
                                     <FormMessage />
@@ -243,6 +245,7 @@ const FormPage = () => {
                                         placeholder="Enter your other names"
                                         {...field}
                                         className="lg:text-base"
+                                        readOnly={ninDetails?.first_name?.length > 1}
                                       />
                                     </FormControl>
                                     <FormMessage />
@@ -282,6 +285,7 @@ const FormPage = () => {
                                         placeholder="Enter your NIN"
                                         {...field}
                                         className="lg:text-base"
+                                        readOnly={ninDetails?.nin?.length > 1}
                                       />
                                     </FormControl>
                                     <FormMessage />
@@ -301,6 +305,7 @@ const FormPage = () => {
                                         placeholder="Enter your Phone Number"
                                         {...field}
                                         className="lg:text-base"
+                                        readOnly={ninDetails?.phone_number?.length > 1}
                                       />
                                     </FormControl>
                                     <FormMessage />
