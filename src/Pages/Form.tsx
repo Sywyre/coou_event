@@ -29,7 +29,9 @@ import {
 } from "@/components/ui/carousel";
 import {
   academic,
+  academicQualification,
   base,
+  departments,
   employmentTypes,
   levels,
   nonAcademic,
@@ -60,9 +62,6 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import useFaculty from "@/hooks/useFaculty";
-
-
-//import { Progress } from "@/components/ui/progress";
 
 const schema = z.object({
   surname: z
@@ -96,15 +95,11 @@ const schema = z.object({
 });
 
 const FormPage = () => {
-  // const [progress, setProgress] = useState(0);
-  // const progressCal = (progress / 25) * 100;
-
   const { toast } = useToast();
   const navigate = useNavigate();
 
   const { faculties } = useFaculty();
   console.log(faculties);
- 
 
   const [isLoading, setIsLoading] = useState(false);
   const [date, setDate] = useState<Date>();
@@ -194,9 +189,7 @@ const FormPage = () => {
           <CardTitle className="font-bold text-3xl font-headingFont">
             COOU Staff Data
           </CardTitle>
-          <CardDescription className="flex justify-center">
-            {/* <Progress value={progressCal} className="w-full" /> */}
-          </CardDescription>
+          <CardDescription className="flex justify-center"></CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4">
@@ -482,7 +475,7 @@ const FormPage = () => {
                                   </FormItem>
                                 )}
                               />
-                             <FormField
+                              <FormField
                                 control={form.control}
                                 name="faculty"
                                 render={({ field }) => (
@@ -519,16 +512,38 @@ const FormPage = () => {
                                 name="department"
                                 render={({ field }) => (
                                   <FormItem>
-                                    <FormLabel className="lg:text-base">
-                                      Department
+                                    <FormLabel className="text-base">
+                                      Departments
                                     </FormLabel>
-                                    <FormControl>
-                                      <Input
-                                        placeholder="Enter your Department"
-                                        {...field}
-                                        className="lg:text-base"
-                                      />
-                                    </FormControl>
+                                    <Select
+                                      onValueChange={field.onChange}
+                                      defaultValue={field.value}
+                                    >
+                                      <FormControl>
+                                        <SelectTrigger className="w-full">
+                                          <SelectValue placeholder="Select your department" />
+                                        </SelectTrigger>
+                                      </FormControl>
+                                      <SelectContent>
+                                        {departments.map((department) => (
+                                          <SelectGroup key={department.faculty}>
+                                            <SelectLabel className="font-bold">
+                                              {department.faculty}
+                                            </SelectLabel>
+                                            {department.departments.map((d) => (
+                                              <SelectItem
+                                                key={d.value}
+                                                value={d.value}
+                                                className="text-base"
+                                              >
+                                                {d.name}
+                                              </SelectItem>
+                                            ))}
+                                          </SelectGroup>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+
                                     <FormMessage />
                                   </FormItem>
                                 )}
@@ -791,16 +806,33 @@ const FormPage = () => {
                                 name="academic_qualification"
                                 render={({ field }) => (
                                   <FormItem>
-                                    <FormLabel className="lg:text-base">
+                                    <FormLabel>
                                       Academic Qualification
                                     </FormLabel>
-                                    <FormControl>
-                                      <Input
-                                        placeholder="Enter your academic qualification"
-                                        {...field}
-                                        className="lg:text-base"
-                                      />
-                                    </FormControl>
+                                    <Select
+                                      onValueChange={field.onChange}
+                                      defaultValue={field.value}
+                                    >
+                                      <FormControl>
+                                        <SelectTrigger className="w-full">
+                                          <SelectValue placeholder="Select your Academic Qualification" />
+                                        </SelectTrigger>
+                                      </FormControl>
+                                      <SelectContent>
+                                        <SelectGroup>
+                                          {academicQualification.map(
+                                            (academic) => (
+                                              <SelectItem
+                                                key={academic.value}
+                                                value={academic.value}
+                                              >
+                                                {academic.name}
+                                              </SelectItem>
+                                            )
+                                          )}
+                                        </SelectGroup>
+                                      </SelectContent>
+                                    </Select>
                                     <FormMessage />
                                   </FormItem>
                                 )}

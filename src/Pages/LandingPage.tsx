@@ -19,9 +19,9 @@ import apiClient from "@/services/api-client";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Toaster } from "@/components/ui/toaster";
+import { DialogClose } from "@radix-ui/react-dialog";
 
-interface Nin {
-  nin: string;
+interface NinDetails {
   first_name: string;
   last_name: string;
   middle_name: string;
@@ -29,6 +29,10 @@ interface Nin {
   date_of_birth: string;
   photo: string;
   gender: string;
+}
+
+interface Nin {
+  entity: NinDetails
 }
 
 const schema = z.object({
@@ -42,7 +46,11 @@ type formData = z.infer<typeof schema>;
 
 const LandingPage = () => {
   const [ninDetails, setNinDetails] = useState<Nin>();
+  const [nin, setNin] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
+  const [confirmation, setConfirmation] = useState(false);
+  
+ 
 
   const { toast } = useToast();
 
@@ -52,6 +60,7 @@ const LandingPage = () => {
 
   const handleVerification = (values: formData) => {
     setIsLoading(true);
+    setNin(values.nin)
     apiClient
       .get<Nin>("https://api.dojah.io/api/v1/kyc/nin/", {
         params: {
@@ -60,8 +69,9 @@ const LandingPage = () => {
       })
       .then((res) => {
         setNinDetails(res.data);
-        localStorage.setItem("ninDetails", JSON.stringify(ninDetails));
+        localStorage.setItem("ninDetails", JSON.stringify(ninDetails?.entity));
         setIsLoading(false);
+        setConfirmation(true);
       })
       .catch((err) => {
         setIsLoading(false);
@@ -71,6 +81,7 @@ const LandingPage = () => {
           description: `${err.message} Try Again`,
         });
         form.reset();
+      
       });
   };
 
@@ -86,43 +97,93 @@ const LandingPage = () => {
             <Button>Add new Entry</Button>
           </DialogTrigger>
           <DialogContent className="w-[300px] lg:w-[425px] rounded-sm">
-            <DialogHeader>
-              <DialogTitle className="font-headingFont">Enter NIN</DialogTitle>
-              <DialogDescription>
-                Verify your NIN here. Click verify when you're done.
-              </DialogDescription>
-            </DialogHeader>
+            {!confirmation && (
+              <DialogHeader>
+                <DialogTitle className="font-headingFont">
+                  Enter NIN
+                </DialogTitle>
+                <DialogDescription>
+                  Verify your NIN here. Click verify when you're done.
+                </DialogDescription>
+              </DialogHeader>
+            )}
             <div className="grid font-bodyFont">
               <div className="flex items-center">
                 <form
                   onSubmit={form.handleSubmit(handleVerification)}
                   className="grid gap-4 w-full"
                 >
-                  <div>
-                    <Label htmlFor="name" className="text-right font-bold">
-                      NIN
-                    </Label>
-                    <Input
-                      id="name"
-                      {...form.register("nin")}
-                      className="col-span-3 w-full"
-                    />
-                    {form.formState.errors.nin && (
-                      <p className="text-[red] text-sm pt-2">
-                        {form.formState.errors.nin?.message}
-                      </p>
-                    )}
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <Link to="/form">
-                      <Button className="w-full">Skip</Button>
-                    </Link>
-                    <Button type="submit" disabled={!form.formState.isValid}>
-                      {isLoading && (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {!confirmation && (
+                    <div>
+                      <Label htmlFor="name" className="text-right font-bold">
+                        NIN
+                      </Label>
+                      <Input
+                        id="name"
+                        {...form.register("nin")}
+                        className="col-span-3 w-full"
+                      />
+                      {form.formState.errors.nin && (
+                        <p className="text-[red] text-sm pt-2">
+                          {form.formState.errors.nin?.message}
+                        </p>
                       )}
-                      Verify
-                    </Button>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-2 gap-4">
+                    {!confirmation && (
+                      <Link to="/form">
+                        <Button className="w-full">Skip</Button>
+                      </Link>
+                    )}
+                    {confirmation ? (
+                      <Dialog>
+                        <DialogTrigger className="w-[250px]" asChild>
+                          <Button>Confirm NIN Details</Button>
+                        </DialogTrigger>
+                        <DialogContent className="w-[300px] lg:w-[425px] rounded-sm">
+                          <DialogHeader>
+                            <DialogTitle className="font-headingFont">
+                              Confirm NIN Details
+                            </DialogTitle>
+                            <DialogDescription>
+                              Check if the details from NIN match the physcial
+                              form you're about to fill.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="grid font-bodyFont">
+                            <div className="flex items-center">
+                              <ul>
+                                <li>NIN: {nin}</li>
+                                <li>Surname: {ninDetails?.entity.last_name}</li>
+                                <li>
+                                  Other name: {ninDetails?.entity.first_name} {ninDetails?.entity.middle_name}
+                                </li>
+                                <li>Phone number: {ninDetails?.entity.phone_number}</li>
+                                <li>DoB: {ninDetails?.entity.date_of_birth}</li>
+                                <li>Gender: {ninDetails?.entity.gender}</li>
+                              </ul>
+                            </div>
+                          </div>
+                          <DialogFooter className="grid gap-4 grid-cols-2">  
+                          
+                            <DialogClose  />                       
+                       
+                            <Link to="/form">
+                              <Button className="w-full">Continue</Button>
+                            </Link>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    ) : (
+                      <Button type="submit" disabled={!form.formState.isValid}>
+                        {isLoading && (
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        )}
+                        Verify
+                      </Button>
+                    )}
                   </div>
                 </form>
               </div>
