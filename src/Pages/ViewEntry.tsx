@@ -24,6 +24,7 @@ interface FormDetails {
 const ViewEntry = () => {
   const [allFormDetails, setAllFormDetails] = useState<any>();
 
+
   useEffect(() => {
     base("Form")
       .select({ view: "Grid view" })
@@ -84,10 +85,10 @@ const ViewEntry = () => {
                 </Link>
               </TableCell>
               <TableCell>
-                <Button>Verify</Button>
+                <Button disabled>Verify</Button>
               </TableCell>
               <TableCell>
-                <Button>Capture</Button>
+                <Button disabled>Capture</Button>
               </TableCell>
             </TableRow>
           ))}
