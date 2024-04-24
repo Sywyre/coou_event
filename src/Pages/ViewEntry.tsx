@@ -24,7 +24,6 @@ interface FormDetails {
 const ViewEntry = () => {
   const [allFormDetails, setAllFormDetails] = useState<any>();
 
-
   useEffect(() => {
     base(import.meta.env.VITE_AIRTABLE_TABLE)
       .select({ view: "Grid view" })
@@ -36,6 +35,13 @@ const ViewEntry = () => {
         fetchNextPage();
       });
   }, []);
+
+  if (allFormDetails?.length === 0)
+    return (
+      <p className="text-muted-foreground text-center my-2 text-xs">
+        There is no Entry to view
+      </p>
+    );
 
   return (
     <div>
