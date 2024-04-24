@@ -148,8 +148,8 @@ const LandingPage = () => {
                                 <li>Gender: {ninDetails.gender}</li>
                               </ul>
                               <img
-                                className="self-start"
-                                src={`${ninDetails.photo}`}
+                                className="self-start w-[200px] h-[200px]"
+                                src={`data:image/jpeg;base64,${ninDetails.photo}`}
                               />
                             </div>
                           </div>
