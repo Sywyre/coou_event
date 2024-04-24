@@ -35,7 +35,6 @@ const ViewEntry = () => {
         fetchNextPage();
       });
   }, []);
-  console.log(allFormDetails);
 
   return (
     <div>

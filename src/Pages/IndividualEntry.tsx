@@ -39,9 +39,8 @@ interface RecordData {
 
 const IndividualEntry = () => {
   const param = useParams();
-  console.log(param.id);
+
   const [individualData, setIndividualData] = useState<any | RecordData>();
-  console.log(individualData);
 
   useEffect(() => {
     base("Form").find(`${param.id}`, function (err, record) {

@@ -62,6 +62,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import useFaculty from "@/hooks/useFaculty";
+import useNinStore from "@/stores";
 
 const schema = z.object({
   surname: z
@@ -99,7 +100,7 @@ const FormPage = () => {
   const navigate = useNavigate();
 
   const { faculties } = useFaculty();
-
+  const { ninDetails } = useNinStore();
 
   const [isLoading, setIsLoading] = useState(false);
   const [date, setDate] = useState<Date>();
@@ -110,9 +111,11 @@ const FormPage = () => {
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      surname: "",
-      othername: "",
-      email: "",
+      surname: `${ninDetails.last_name}`,
+      othername: `${ninDetails.first_name} ${ninDetails.middle_name}`,
+      nin: `${ninDetails.nin}`,
+      gender: `${ninDetails.gender}`,
+      phoneNumber: `${ninDetails.phone_number}`,
     },
   });
 
@@ -353,10 +356,10 @@ const FormPage = () => {
                                       </FormControl>
                                       <SelectContent>
                                         <SelectGroup>
-                                          <SelectItem value="male">
+                                          <SelectItem value="m">
                                             Male
                                           </SelectItem>
-                                          <SelectItem value="female">
+                                          <SelectItem value="f">
                                             Female
                                           </SelectItem>
                                         </SelectGroup>

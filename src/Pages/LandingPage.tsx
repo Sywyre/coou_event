@@ -19,21 +19,7 @@ import apiClient from "@/services/api-client";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Toaster } from "@/components/ui/toaster";
-import { DialogClose } from "@radix-ui/react-dialog";
-
-interface NinDetails {
-  first_name: string;
-  last_name: string;
-  middle_name: string;
-  phone_number: string;
-  date_of_birth: string;
-  photo: string;
-  gender: string;
-}
-
-interface Nin {
-  entity: NinDetails;
-}
+import useNinStore, { Nin } from "@/stores";
 
 const schema = z.object({
   nin: z
@@ -45,12 +31,12 @@ const schema = z.object({
 type formData = z.infer<typeof schema>;
 
 const LandingPage = () => {
-  const [ninDetails, setNinDetails] = useState<Nin>();
   const [nin, setNin] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
   const [confirmation, setConfirmation] = useState(false);
 
   const { toast } = useToast();
+  const { ninDetails, updateNin } = useNinStore();
 
   const form = useForm<formData>({
     resolver: zodResolver(schema),
@@ -66,7 +52,7 @@ const LandingPage = () => {
         },
       })
       .then((res) => {
-        setNinDetails(res.data);
+        updateNin({...res.data.entity, nin: values.nin});
         setIsLoading(false);
         setConfirmation(true);
       })
@@ -152,25 +138,24 @@ const LandingPage = () => {
                             <div className="flex items-center">
                               <ul>
                                 <li>NIN: {nin}</li>
-                                <li>Surname: {ninDetails?.entity.last_name}</li>
+                                <li>Surname: {ninDetails.last_name}</li>
                                 <li>
-                                  Other name: {ninDetails?.entity.first_name}{" "}
-                                  {ninDetails?.entity.middle_name}
+                                  Other name: {ninDetails.first_name}{" "}
+                                  {ninDetails.middle_name}
                                 </li>
-                                <li>
-                                  Phone number:{" "}
-                                  {ninDetails?.entity.phone_number}
-                                </li>
-                                <li>DoB: {ninDetails?.entity.date_of_birth}</li>
-                                <li>Gender: {ninDetails?.entity.gender}</li>
+                                <li>Phone number: {ninDetails.phone_number}</li>
+                                <li>DoB: {ninDetails.date_of_birth}</li>
+                                <li>Gender: {ninDetails.gender}</li>
                               </ul>
+                              <img
+                                className="self-start"
+                                src={`${ninDetails.photo}`}
+                              />
                             </div>
                           </div>
-                          <DialogFooter className="grid gap-4 grid-cols-2">
-                            <DialogClose />
-
+                          <DialogFooter className="grid gap-4 grid-cols-1">
                             <Link to="/form">
-                              <Button className="w-full">Continue</Button>
+                              <Button className="w-full" onClick={() => setConfirmation(false)}>Continue</Button>
                             </Link>
                           </DialogFooter>
                         </DialogContent>
