@@ -47,7 +47,7 @@ const ViewEntry = () => {
             <TableHead>Other Names</TableHead>
             <TableHead>Phone Number</TableHead>
             <TableHead>Gender</TableHead>
-            <TableHead>Verified</TableHead>
+            <TableHead>NIN Verified</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
