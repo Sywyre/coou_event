@@ -111,11 +111,17 @@ const FormPage = () => {
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      surname: `${ninDetails.last_name}`,
-      othername: `${ninDetails.first_name} ${ninDetails.middle_name}`,
-      nin: `${ninDetails.nin}`,
-      gender: `${ninDetails.gender}`,
-      phoneNumber: `${ninDetails.phone_number}`,
+      surname: `${
+        ninDetails.last_name == undefined ? "" : ninDetails.last_name
+      }`,
+      othername: `${
+        ninDetails.first_name == undefined ? "" : ninDetails.first_name
+      } ${ninDetails.middle_name == undefined ? "" : ninDetails.middle_name}`,
+      nin: `${ninDetails.nin == undefined ? "" : ninDetails.nin}`,
+      gender: `${ninDetails.gender == undefined ? "" : ninDetails.gender}`,
+      phoneNumber: `${
+        ninDetails.phone_number == undefined ? "" : ninDetails.phone_number
+      }`,
     },
   });
 
