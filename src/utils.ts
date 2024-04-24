@@ -373,13 +373,3 @@ export const departments = [
 ];
 
 
-export const nin = {
-  nin: "70123456789",
-  first_name: "John",
-  last_name: "Doe",
-  middle_name: "Alamutu",
-  phone_number: "08012345678",
-  date_of_birth: "1982-01-01",
-  photo: "/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAgGBgc...",
-  gender: "m",
-}

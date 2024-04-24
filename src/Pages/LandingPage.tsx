@@ -32,7 +32,7 @@ interface NinDetails {
 }
 
 interface Nin {
-  entity: NinDetails
+  entity: NinDetails;
 }
 
 const schema = z.object({
@@ -49,8 +49,6 @@ const LandingPage = () => {
   const [nin, setNin] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
   const [confirmation, setConfirmation] = useState(false);
-  
- 
 
   const { toast } = useToast();
 
@@ -60,7 +58,7 @@ const LandingPage = () => {
 
   const handleVerification = (values: formData) => {
     setIsLoading(true);
-    setNin(values.nin)
+    setNin(values.nin);
     apiClient
       .get<Nin>("https://api.dojah.io/api/v1/kyc/nin/", {
         params: {
@@ -69,7 +67,6 @@ const LandingPage = () => {
       })
       .then((res) => {
         setNinDetails(res.data);
-        localStorage.setItem("ninDetails", JSON.stringify(ninDetails?.entity));
         setIsLoading(false);
         setConfirmation(true);
       })
@@ -81,7 +78,6 @@ const LandingPage = () => {
           description: `${err.message} Try Again`,
         });
         form.reset();
-      
       });
   };
 
@@ -158,18 +154,21 @@ const LandingPage = () => {
                                 <li>NIN: {nin}</li>
                                 <li>Surname: {ninDetails?.entity.last_name}</li>
                                 <li>
-                                  Other name: {ninDetails?.entity.first_name} {ninDetails?.entity.middle_name}
+                                  Other name: {ninDetails?.entity.first_name}{" "}
+                                  {ninDetails?.entity.middle_name}
                                 </li>
-                                <li>Phone number: {ninDetails?.entity.phone_number}</li>
+                                <li>
+                                  Phone number:{" "}
+                                  {ninDetails?.entity.phone_number}
+                                </li>
                                 <li>DoB: {ninDetails?.entity.date_of_birth}</li>
                                 <li>Gender: {ninDetails?.entity.gender}</li>
                               </ul>
                             </div>
                           </div>
-                          <DialogFooter className="grid gap-4 grid-cols-2">  
-                          
-                            <DialogClose  />                       
-                       
+                          <DialogFooter className="grid gap-4 grid-cols-2">
+                            <DialogClose />
+
                             <Link to="/form">
                               <Button className="w-full">Continue</Button>
                             </Link>

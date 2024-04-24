@@ -99,7 +99,7 @@ const FormPage = () => {
   const navigate = useNavigate();
 
   const { faculties } = useFaculty();
-  console.log(faculties);
+
 
   const [isLoading, setIsLoading] = useState(false);
   const [date, setDate] = useState<Date>();
