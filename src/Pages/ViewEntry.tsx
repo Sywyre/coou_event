@@ -24,6 +24,7 @@ interface FormDetails {
 const ViewEntry = () => {
   const [allFormDetails, setAllFormDetails] = useState<any>();
 
+
   useEffect(() => {
     base(import.meta.env.VITE_AIRTABLE_TABLE)
       .select({ view: "Grid view" })
@@ -31,7 +32,6 @@ const ViewEntry = () => {
         setAllFormDetails(
           records.map((record) => ({ id: record.id, fields: record.fields }))
         );
-        console.log("records", records);
         fetchNextPage();
       });
   }, []);
@@ -103,7 +103,9 @@ const ViewEntry = () => {
                 <Button disabled>Verify</Button>
               </TableCell>
               <TableCell>
-                <Button disabled>Capture</Button>
+                <Link to={`/camera/${data.id}`}>
+                  <Button disabled={data.fields.is_captured == 'true'}>{data.fields.is_captured == 'true' ? 'Captured' : 'Capture'}</Button>
+                </Link>
               </TableCell>
             </TableRow>
           ))}
