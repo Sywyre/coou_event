@@ -99,9 +99,9 @@ const ViewEntry = () => {
                   {data.fields.nin_is_valid}
                 </Link>
               </TableCell>
-              <TableCell>
+              {/* <TableCell>
                 <Button disabled>Verify</Button>
-              </TableCell>
+              </TableCell> */}
               <TableCell>
                 <Link to={`/camera/${data.id}`}>
                   <Button disabled={data.fields.is_captured == 'true'}>{data.fields.is_captured == 'true' ? 'Captured' : 'Capture'}</Button>
