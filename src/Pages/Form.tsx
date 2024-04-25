@@ -126,7 +126,6 @@ const FormPage = () => {
   });
 
   const onSubmit = (values: z.infer<typeof schema>) => {
-    console.log(values);
     setIsLoading(true);
 
     const payload = {
@@ -136,6 +135,7 @@ const FormPage = () => {
       email: values.email,
       nin: values.nin,
       nin_is_valid: ninDetails.nin ? '✅' : '',
+      is_captured: 'false',
       phone_number: values.phoneNumber,
       gender: values.gender,
       dob: date?.toDateString(),
@@ -159,8 +159,8 @@ const FormPage = () => {
       recommendations: values.recommendations,
       job_description: values.job_description,
     };
-
-    base("Form").create(
+   
+    base(import.meta.env.VITE_AIRTABLE_TABLE).create(
       [
         {
           fields: payload,

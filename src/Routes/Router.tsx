@@ -5,6 +5,7 @@ import IndividualEntry from "@/Pages/IndividualEntry";
 import LandingPage from "@/Pages/LandingPage";
 import ViewEntry from "@/Pages/ViewEntry";
 import ProtectedRoutes from "@/components/ProtectedRoutes";
+import Webcamera from "@/components/Webcam";
 import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -16,6 +17,7 @@ const router = createBrowserRouter([
       { index: true, element: <LandingPage /> },
       { path: "/form", element: <FormPage /> },
       { path: "/view", element: <ViewEntry /> },
+      {path: "/camera/:id", element: <Webcamera />},
       { path: "/view/:id", element: <IndividualEntry /> },
     ],
   },

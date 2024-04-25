@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
+
 interface RecordData {
   surname: string;
   othername: string;
@@ -41,14 +42,18 @@ const IndividualEntry = () => {
 
   const [individualData, setIndividualData] = useState<any | RecordData>();
 
+
   useEffect(() => {
-    base("Form").find(`${param.id}`, function (err, record) {
-      if (err) {
-        console.error(err);
-        return;
+    base(import.meta.env.VITE_AIRTABLE_TABLE).find(
+      `${param.id}`,
+      function (err, record) {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        setIndividualData(record?.fields);
       }
-      setIndividualData(record?.fields);
-    });
+    );
   }, []);
 
   return (
@@ -58,7 +63,7 @@ const IndividualEntry = () => {
           <div className="grid gap-0.5">
             <CardTitle className="group flex items-center gap-2 text-lg">
               {individualData?.surname}
-               {individualData?.nin_is_valid}
+              {individualData?.nin_is_valid}
             </CardTitle>
             <CardDescription>
               This entry was made on {individualData?.date_filled}
@@ -68,19 +73,22 @@ const IndividualEntry = () => {
         <CardContent className="p-6 text-base">
           <div className="grid gap-3">
             <div className="font-semibold text-lg">Personal Details</div>
-            <ul className="grid gap-3 font-medium">
-              <li>Surname: {individualData?.surname}</li>
-              <li>Other Names: {individualData?.other_names}</li>
-              <li>Date of Birth: {individualData?.dob}</li>
-              <li>Email: {individualData?.email}</li>
-              <li>NIN: {individualData?.nin}</li>
-              <li>Phone Number: {individualData?.phone_number}</li>
-              <li>Gender: {individualData?.gender}</li>
-              <li>Address: {individualData?.contact_address}</li>
-              <li>State: {individualData?.state_of_origin}</li>
-              <li>LGA: {individualData?.lga}</li>
-              <li>Town: {individualData?.town}</li>
-            </ul>
+            <div className="grid grid-cols-2">
+              <ul className="grid gap-3 font-medium">
+                <li>Surname: {individualData?.surname}</li>
+                <li>Other Names: {individualData?.other_names}</li>
+                <li>Date of Birth: {individualData?.dob}</li>
+                <li>Email: {individualData?.email}</li>
+                <li>NIN: {individualData?.nin}</li>
+                <li>Phone Number: {individualData?.phone_number}</li>
+                <li>Gender: {individualData?.gender}</li>
+                <li>Address: {individualData?.contact_address}</li>
+                <li>State: {individualData?.state_of_origin}</li>
+                <li>LGA: {individualData?.lga}</li>
+                <li>Town: {individualData?.town}</li>
+              </ul>
+              <img src={individualData?.captured_img} className="self-start w-[300px]" alt="Screenshot" />
+            </div>
             <Separator className="my-2" />
             <ul className="grid gap-3 font-medium bg-muted/60">
               <div className="font-semibold text-lg">Employment Details</div>

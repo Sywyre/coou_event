@@ -26,16 +26,22 @@ const ViewEntry = () => {
 
 
   useEffect(() => {
-    base("Form")
+    base(import.meta.env.VITE_AIRTABLE_TABLE)
       .select({ view: "Grid view" })
       .eachPage((records, fetchNextPage) => {
         setAllFormDetails(
           records.map((record) => ({ id: record.id, fields: record.fields }))
         );
-        console.log("records", records);
         fetchNextPage();
       });
   }, []);
+
+  if (allFormDetails?.length === 0)
+    return (
+      <p className="text-muted-foreground text-center my-2 text-xs">
+        There is no Entry to view
+      </p>
+    );
 
   return (
     <div>
@@ -93,11 +99,13 @@ const ViewEntry = () => {
                   {data.fields.nin_is_valid}
                 </Link>
               </TableCell>
-              <TableCell>
+              {/* <TableCell>
                 <Button disabled>Verify</Button>
-              </TableCell>
+              </TableCell> */}
               <TableCell>
-                <Button disabled>Capture</Button>
+                <Link to={`/camera/${data.id}`}>
+                  <Button disabled={data.fields.is_captured == 'true'}>{data.fields.is_captured == 'true' ? 'Captured' : 'Capture'}</Button>
+                </Link>
               </TableCell>
             </TableRow>
           ))}

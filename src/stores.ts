@@ -19,9 +19,24 @@ interface NinStore {
   updateNin: (nin: NinDetails) => void;
 }
 
-const useNinStore = create<NinStore>(set => ({
-    ninDetails: {} as NinDetails,
-    updateNin: (nin) => set(store => ({ ninDetails: store.ninDetails = nin}))
+const useNinStore = create<NinStore>((set) => ({
+  ninDetails: {} as NinDetails,
+  updateNin: (nin) =>
+    set((store) => ({ ninDetails: (store.ninDetails = nin) })),
 }));
 
 export default useNinStore;
+
+interface CamStore {
+  url: string | null;
+  bool: string;
+  updateBool: (b: string) => void;
+  updateUrl: (img: string | null) => void;
+}
+
+export const useCam = create<CamStore>((set) => ({
+  url: "",
+  bool: 'false',
+  updateBool: (b) => set((store) => ({ bool: (store.bool = b) })),
+  updateUrl: (img) => set((store) => ({ url: (store.url = img) })),
+}));
