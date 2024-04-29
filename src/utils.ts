@@ -139,32 +139,20 @@ export const employmentTypes = [
   { name: "Contract", value: "Contract" },
   { name: "Adjunct", value: "Adjunct" },
   { name: "Sabbatical", value: "Sabbatical" },
+  { name: "Internship", value: "Internship" },
+  { name: "Others", value: "Others" },
 ];
 
 export const academicQualification = [
-  { name: "Bachelor of Arts (BA)", value: "Bachelor of Arts (BA)" },
-  {
-    name: "Bachelor of Business Administration (BBA)",
-    value: "Bachelor of Business Administration (BBA)",
-  },
-  {
-    name: "Bachelor of Engineering (BE)",
-    value: "Bachelor of Engineering (BE)",
-  },
-  { name: "Bachelor of Laws (LL.B)", value: "Bachelor of Laws (LL.B)" },
-  {
-    name: "Bachelor of Medicine and Bachelor of Surgery (MBBS)",
-    value: "Bachelor of Medicine and Bachelor of Surgery (MBBS)",
-  },
-  { name: "Bachelor of Science (BSc)", value: "Bachelor of Science (BSc)" },
-  {
-    name: "Bachelor of Technology (BTech)",
-    value: "Bachelor of Technology (BTech)",
-  },
-  {
-    name: "Bachelor of Pharmacy (B Pharm)",
-    value: "Bachelor of Pharmacy (B Pharm)",
-  },
+  { name: 'FSLC', value: 'FSLC' },
+  { name: 'SSCE', value: 'SSCE' },
+  { name: 'NCE', value: 'NCE' },
+  { name: 'OND', value: 'OND' },
+  { name: 'HND', value: 'HND' },
+  { name: 'DEGREE', value: 'DEGREE' },
+  { name: 'PGD', value: 'PGD' },
+  { name: 'Master', value: 'Master' },
+  { name: 'PHD', value: 'PHD' }
 ];
 
 export const departments = [

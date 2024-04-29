@@ -40,3 +40,14 @@ export const useCam = create<CamStore>((set) => ({
   updateBool: (b) => set((store) => ({ bool: (store.bool = b) })),
   updateUrl: (img) => set((store) => ({ url: (store.url = img) })),
 }));
+
+
+interface SearchStore {
+  query: string | null;
+  setQuery: (parameter: string) => void;
+}
+
+export const useSearch = create<SearchStore>((set) => ({
+  query: "",
+ setQuery: (parameter) => set((store) => ({query: (store.query = parameter)}))
+}));

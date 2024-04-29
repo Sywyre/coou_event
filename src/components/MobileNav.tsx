@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import SearchBar from "./Search";
 
 const MobileNav = () => {
   const location = useLocation();
@@ -67,7 +68,7 @@ const MobileNav = () => {
           </nav>
         </SheetContent>
       </Sheet>
-
+      {location.pathname === '/view' && <SearchBar />}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button

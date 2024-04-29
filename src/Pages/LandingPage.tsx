@@ -52,7 +52,7 @@ const LandingPage = () => {
         },
       })
       .then((res) => {
-        updateNin({...res.data.entity, nin: values.nin});
+        updateNin({ ...res.data.entity, nin: values.nin });
         setIsLoading(false);
         setConfirmation(true);
       })
@@ -121,7 +121,7 @@ const LandingPage = () => {
                     )}
                     {confirmation ? (
                       <Dialog>
-                        <DialogTrigger className="w-[250px]" asChild>
+                        <DialogTrigger className="w-[300px]" asChild>
                           <Button>Confirm NIN Details</Button>
                         </DialogTrigger>
                         <DialogContent className="w-[300px] lg:w-[425px] rounded-sm">
@@ -137,25 +137,57 @@ const LandingPage = () => {
                           <div className="grid font-bodyFont">
                             <div className="flex items-center">
                               <ul>
-                                <li>NIN: {nin}</li>
-                                <li>Surname: {ninDetails.last_name}</li>
-                                <li>
-                                  Other name: {ninDetails.first_name}{" "}
-                                  {ninDetails.middle_name}
+                                <li className="font-semibold">
+                                  NIN: <span className="text-md">{nin}</span>
                                 </li>
-                                <li>Phone number: {ninDetails.phone_number}</li>
-                                <li>DoB: {ninDetails.date_of_birth}</li>
-                                <li>Gender: {ninDetails.gender}</li>
+                                <li className="font-semibold">
+                                  Surname:{" "}
+                                  <span className="text-md">
+                                    {ninDetails.last_name}
+                                  </span>
+                                </li>
+                                <li className="font-semibold">
+                                  Other name:{" "}
+                                  <span className="text-md">
+                                    {ninDetails.first_name}{" "}
+                                    {ninDetails.middle_name}
+                                  </span>
+                                </li>
+                                <li className="font-semibold">
+                                  Phone number:{" "}
+                                  <span className="text-md">
+                                    {ninDetails.phone_number}
+                                  </span>
+                                </li>
+                                <li className="font-semibold">
+                                  DoB:
+                                  <span className="text-md">
+                                    {" "}
+                                    {ninDetails.date_of_birth}
+                                  </span>
+                                </li>
+                                <li className="font-semibold">
+                                  Gender:
+                                  <span className="text-md">
+                                    {" "}
+                                    {ninDetails.gender}
+                                  </span>
+                                </li>
                               </ul>
                               <img
-                                className="self-start w-[200px] h-[200px]"
+                                className="self-start w-[150px] h-[150px]"
                                 src={`data:image/jpeg;base64,${ninDetails.photo}`}
                               />
                             </div>
                           </div>
                           <DialogFooter className="grid gap-4 grid-cols-1">
                             <Link to="/form">
-                              <Button className="w-full" onClick={() => setConfirmation(false)}>Continue</Button>
+                              <Button
+                                className="w-full"
+                                onClick={() => setConfirmation(false)}
+                              >
+                                Continue
+                              </Button>
                             </Link>
                           </DialogFooter>
                         </DialogContent>

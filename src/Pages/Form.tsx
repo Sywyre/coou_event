@@ -27,17 +27,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import {
-  academic,
-  academicQualification,
-  base,
-  departments,
-  employmentTypes,
-  levels,
-  nonAcademic,
-  states,
-  units,
-} from "@/utils";
+import { academicQualification, base, employmentTypes, states } from "@/utils";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
@@ -60,9 +50,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import useFaculty from "@/hooks/useFaculty";
 import useNinStore from "@/stores";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const schema = z.object({
   surname: z
@@ -73,7 +63,7 @@ const schema = z.object({
     .string()
     .min(2, { message: "Other names must contain at least 2 characters" })
     .max(50),
-  email: z.string().email(),
+  email: z.string().email().optional().or(z.literal("")),
   nin: z.string(),
   phoneNumber: z.string(),
   gender: z.string(),
@@ -82,17 +72,21 @@ const schema = z.object({
   lga: z.string(),
   town: z.string(),
   staff_id: z.string(),
-  faculty: z.string(),
+  staff_type: z
+    .enum(["Yes", "No"], {
+      required_error: "You need to select a value.",
+    })
+    .optional()
+    .or(z.literal("")),
+  faculty: z.string().optional().or(z.literal("")),
   department: z.string(),
-  unit: z.string(),
+  unit: z.string().optional().or(z.literal("")),
   present_rank: z.string(),
-  grade_level: z.string(),
   academic_qualification: z.string(),
-  professional_qualification: z.string(),
-  type_of_employment: z.string(),
-  challenges: z.string(),
-  recommendations: z.string(),
-  job_description: z.string(),
+  professional_qualification: z.enum(["Yes", "No"], {
+    required_error: "You need to select a value.",
+  }),
+  type_of_employment: z.string().optional().or(z.literal("")),
 });
 
 const FormPage = () => {
@@ -107,6 +101,8 @@ const FormPage = () => {
   const [dutyDate, setDutyDate] = useState<Date>();
   const [employmentDate, setEmploymentDate] = useState<Date>();
   const [lastPromoDate, setLastPromoDate] = useState<Date>();
+  const [isTeaching, setIsTeaching] = useState("");
+  const [employmentType, setEmploymentType] = useState("");
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -134,8 +130,8 @@ const FormPage = () => {
       admin_email: localStorage.getItem("admin_email")?.toString(),
       email: values.email,
       nin: values.nin,
-      nin_is_valid: ninDetails.nin ? '✅' : '',
-      is_captured: 'false',
+      nin_is_valid: ninDetails.nin ? "✅" : "",
+      is_captured: "false",
       phone_number: values.phoneNumber,
       gender: values.gender,
       dob: date?.toDateString(),
@@ -144,22 +140,20 @@ const FormPage = () => {
       lga: values.lga,
       town: values.town,
       staff_id: values.staff_id,
+      teaching_staff: isTeaching,
       faculty: values.faculty,
-      department: values.department,
       unit: values.unit,
+      department: values.department,
       date_of_assumption_of_duty: dutyDate?.toDateString(),
       date_of_confirmation_of_employment: employmentDate?.toDateString(),
       present_rank: values.present_rank,
-      grade_level: values.grade_level,
       last_promotion_date: lastPromoDate?.toDateString(),
       academic_qualification: values.academic_qualification,
       professional_qualification: values.professional_qualification,
-      type_of_employment: values.type_of_employment,
-      challenges: values.challenges,
-      recommendations: values.recommendations,
-      job_description: values.job_description,
+      other_type_of_employment: values.type_of_employment,
+      type_of_employment: employmentType,
     };
-   
+
     base(import.meta.env.VITE_AIRTABLE_TABLE).create(
       [
         {
@@ -225,7 +219,9 @@ const FormPage = () => {
                                         placeholder="Enter a surname"
                                         {...field}
                                         className="lg:text-base"
-                                        readOnly={ninDetails?.last_name?.length > 1}
+                                        readOnly={
+                                          ninDetails?.last_name?.length > 1
+                                        }
                                       />
                                     </FormControl>
                                     <FormMessage />
@@ -245,33 +241,16 @@ const FormPage = () => {
                                         placeholder="Enter your other names"
                                         {...field}
                                         className="lg:text-base"
-                                        readOnly={ninDetails?.first_name?.length > 1}
+                                        readOnly={
+                                          ninDetails?.first_name?.length > 1
+                                        }
                                       />
                                     </FormControl>
                                     <FormMessage />
                                   </FormItem>
                                 )}
                               />
-                              <FormField
-                                control={form.control}
-                                name="email"
-                                render={({ field }) => (
-                                  <FormItem>
-                                    <FormLabel className="lg:text-base">
-                                      Email
-                                    </FormLabel>
-                                    <FormControl>
-                                      <Input
-                                        placeholder="Enter your Email"
-                                        {...field}
-                                        className="lg:text-base"
-                                        type="email"
-                                      />
-                                    </FormControl>
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
+
                               <FormField
                                 control={form.control}
                                 name="nin"
@@ -305,7 +284,9 @@ const FormPage = () => {
                                         placeholder="Enter your Phone Number"
                                         {...field}
                                         className="lg:text-base"
-                                        readOnly={ninDetails?.phone_number?.length > 1}
+                                        readOnly={
+                                          ninDetails?.phone_number?.length > 1
+                                        }
                                       />
                                     </FormControl>
                                     <FormMessage />
@@ -313,7 +294,7 @@ const FormPage = () => {
                                 )}
                               />
                               <div className="grid gap-3">
-                                <Label htmlFor="dob" className="text-base">
+                                <Label htmlFor="dob" className="lg:text-base">
                                   Date of Birth
                                 </Label>
                                 <Popover>
@@ -355,7 +336,9 @@ const FormPage = () => {
                                 name="gender"
                                 render={({ field }) => (
                                   <FormItem>
-                                    <FormLabel>Gender</FormLabel>
+                                    <FormLabel className="lg:text-base">
+                                      Gender
+                                    </FormLabel>
                                     <Select
                                       onValueChange={field.onChange}
                                       defaultValue={field.value}
@@ -376,7 +359,6 @@ const FormPage = () => {
                                         </SelectGroup>
                                       </SelectContent>
                                     </Select>
-
                                     <FormMessage />
                                   </FormItem>
                                 )}
@@ -405,7 +387,9 @@ const FormPage = () => {
                                 name="state"
                                 render={({ field }) => (
                                   <FormItem>
-                                    <FormLabel>State of Origin</FormLabel>
+                                    <FormLabel className="lg:text-base">
+                                      State of Origin
+                                    </FormLabel>
                                     <Select
                                       onValueChange={field.onChange}
                                       defaultValue={field.value}
@@ -491,77 +475,98 @@ const FormPage = () => {
                               />
                               <FormField
                                 control={form.control}
-                                name="faculty"
+                                name="staff_type"
                                 render={({ field }) => (
-                                  <FormItem>
-                                    <FormLabel>Faculty</FormLabel>
-                                    <Select
-                                      onValueChange={field.onChange}
-                                      defaultValue={field.value}
-                                    >
-                                      <FormControl>
-                                        <SelectTrigger className="w-full">
-                                          <SelectValue placeholder="Select your faculty" />
-                                        </SelectTrigger>
-                                      </FormControl>
-                                      <SelectContent>
-                                        <SelectGroup>
-                                          {faculties?.map((faculty) => (
-                                            <SelectItem
-                                              key={faculty.id}
-                                              value={faculty.name}
-                                            >
-                                              {faculty.name}
-                                            </SelectItem>
-                                          ))}
-                                        </SelectGroup>
-                                      </SelectContent>
-                                    </Select>
+                                  <FormItem className="space-y-3">
+                                    <FormLabel className="lg:text-base">
+                                      Are you a teaching staff
+                                    </FormLabel>
+                                    <FormControl>
+                                      <RadioGroup
+                                        onValueChange={(selectedValue) =>
+                                          setIsTeaching(selectedValue)
+                                        }
+                                        defaultValue={field.value}
+                                        className="flex space-x-1"
+                                      >
+                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                          <FormControl>
+                                            <RadioGroupItem value="Yes" />
+                                          </FormControl>
+                                          <FormLabel className="font-normal">
+                                            Yes
+                                          </FormLabel>
+                                        </FormItem>
+                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                          <FormControl>
+                                            <RadioGroupItem value="No" />
+                                          </FormControl>
+                                          <FormLabel className="font-normal">
+                                            No
+                                          </FormLabel>
+                                        </FormItem>
+                                      </RadioGroup>
+                                    </FormControl>
                                     <FormMessage />
                                   </FormItem>
                                 )}
                               />
-                              <FormField
-                                control={form.control}
-                                name="department"
-                                render={({ field }) => (
-                                  <FormItem>
-                                    <FormLabel className="text-base">
-                                      Departments
-                                    </FormLabel>
-                                    <Select
-                                      onValueChange={field.onChange}
-                                      defaultValue={field.value}
-                                    >
-                                      <FormControl>
-                                        <SelectTrigger className="w-full">
-                                          <SelectValue placeholder="Select your department" />
-                                        </SelectTrigger>
-                                      </FormControl>
-                                      <SelectContent>
-                                        {departments.map((department) => (
-                                          <SelectGroup key={department.faculty}>
-                                            <SelectLabel className="font-bold">
-                                              {department.faculty}
-                                            </SelectLabel>
-                                            {department.departments.map((d) => (
+                              {isTeaching == "Yes" ? (
+                                <FormField
+                                  control={form.control}
+                                  name="faculty"
+                                  render={({ field }) => (
+                                    <FormItem>
+                                      <FormLabel className="lg:text-base">
+                                        Faculty
+                                      </FormLabel>
+                                      <Select
+                                        onValueChange={field.onChange}
+                                        defaultValue={field.value}
+                                      >
+                                        <FormControl>
+                                          <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Select your faculty" />
+                                          </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                          <SelectGroup>
+                                            {faculties?.map((faculty) => (
                                               <SelectItem
-                                                key={d.value}
-                                                value={d.value}
-                                                className="text-base"
+                                                key={faculty.id}
+                                                value={faculty.name}
                                               >
-                                                {d.name}
+                                                {faculty.name}
                                               </SelectItem>
                                             ))}
                                           </SelectGroup>
-                                        ))}
-                                      </SelectContent>
-                                    </Select>
-
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
+                                        </SelectContent>
+                                      </Select>
+                                      <FormMessage />
+                                    </FormItem>
+                                  )}
+                                />
+                              ) : (
+                                <FormField
+                                  control={form.control}
+                                  name="unit"
+                                  render={({ field }) => (
+                                    <FormItem>
+                                      <FormLabel className="lg:text-base">
+                                        Unit
+                                      </FormLabel>
+                                      <FormControl>
+                                        <Input
+                                          placeholder="Enter your unit"
+                                          {...field}
+                                          className="lg:text-base"
+                                        />
+                                      </FormControl>
+                                      <FormMessage />
+                                    </FormItem>
+                                  )}
+                                />
+                              )}
                             </div>
                           </CardContent>
                         </Card>
@@ -574,45 +579,25 @@ const FormPage = () => {
                             <div className="flex flex-col gap-4 w-full">
                               <FormField
                                 control={form.control}
-                                name="unit"
+                                name="department"
                                 render={({ field }) => (
                                   <FormItem>
-                                    <FormLabel className="text-base">
-                                      Unit
+                                    <FormLabel className="lg:text-base">
+                                      Department
                                     </FormLabel>
-                                    <Select
-                                      onValueChange={field.onChange}
-                                      defaultValue={field.value}
-                                    >
-                                      <FormControl>
-                                        <SelectTrigger className="w-full">
-                                          <SelectValue placeholder="Select your unit" />
-                                        </SelectTrigger>
-                                      </FormControl>
-                                      <SelectContent>
-                                        <SelectGroup>
-                                          <SelectLabel>
-                                            Non-Teaching Staff
-                                          </SelectLabel>
-                                          {units.map((unit) => (
-                                            <SelectItem
-                                              key={unit.value}
-                                              value={unit.value}
-                                              className="text-base"
-                                            >
-                                              {unit.name}
-                                            </SelectItem>
-                                          ))}
-                                        </SelectGroup>
-                                      </SelectContent>
-                                    </Select>
-
+                                    <FormControl>
+                                      <Input
+                                        placeholder="Enter your department"
+                                        {...field}
+                                        className="lg:text-base"
+                                      />
+                                    </FormControl>
                                     <FormMessage />
                                   </FormItem>
                                 )}
                               />
                               <div className="grid gap-3">
-                                <Label htmlFor="dod" className="text-base">
+                                <Label htmlFor="dod" className="lg:text-base">
                                   Date of Assumption of Duty
                                 </Label>
                                 <Popover>
@@ -650,7 +635,7 @@ const FormPage = () => {
                                 </Popover>
                               </div>
                               <div className="grid gap-3">
-                                <Label htmlFor="doe" className="text-base">
+                                <Label htmlFor="doe" className="lg:text-base">
                                   Date of Confirmation of Employment
                                 </Label>
                                 <Popover>
@@ -693,91 +678,23 @@ const FormPage = () => {
                                 name="present_rank"
                                 render={({ field }) => (
                                   <FormItem>
-                                    <FormLabel className="text-base">
+                                    <FormLabel className="lg:text-base">
                                       Present Rank
                                     </FormLabel>
-                                    <Select
-                                      onValueChange={field.onChange}
-                                      defaultValue={field.value}
-                                    >
-                                      <FormControl>
-                                        <SelectTrigger className="w-full">
-                                          <SelectValue placeholder="Select your present rank" />
-                                        </SelectTrigger>
-                                      </FormControl>
-                                      <SelectContent>
-                                        <SelectGroup>
-                                          <SelectLabel>
-                                            Non-Academic Staff
-                                          </SelectLabel>
-                                          {nonAcademic.map((rank) => (
-                                            <SelectItem
-                                              key={rank.value}
-                                              value={rank.value}
-                                              className="text-base"
-                                            >
-                                              {rank.name}
-                                            </SelectItem>
-                                          ))}
-                                        </SelectGroup>
-                                        <SelectGroup>
-                                          <SelectLabel>
-                                            Academic Staff
-                                          </SelectLabel>
-                                          {academic.map((rank) => (
-                                            <SelectItem
-                                              key={rank.value}
-                                              value={rank.value}
-                                              className="text-base"
-                                            >
-                                              {rank.name}
-                                            </SelectItem>
-                                          ))}
-                                        </SelectGroup>
-                                      </SelectContent>
-                                    </Select>
+                                    <FormControl>
+                                      <Input
+                                        placeholder="Enter your present rank"
+                                        {...field}
+                                        className="lg:text-base"
+                                      />
+                                    </FormControl>
                                     <FormMessage />
                                   </FormItem>
                                 )}
                               />
-                              <FormField
-                                control={form.control}
-                                name="grade_level"
-                                render={({ field }) => (
-                                  <FormItem>
-                                    <FormLabel className="text-base">
-                                      Grade Level
-                                    </FormLabel>
-                                    <Select
-                                      onValueChange={field.onChange}
-                                      defaultValue={field.value}
-                                    >
-                                      <FormControl>
-                                        <SelectTrigger className="w-full">
-                                          <SelectValue placeholder="Select your grade level" />
-                                        </SelectTrigger>
-                                      </FormControl>
-                                      <SelectContent>
-                                        <SelectGroup>
-                                          <SelectLabel>Grade Level</SelectLabel>
-                                          {levels.map((level) => (
-                                            <SelectItem
-                                              key={level}
-                                              value={level}
-                                              className="text-base"
-                                            >
-                                              {level}
-                                            </SelectItem>
-                                          ))}
-                                        </SelectGroup>
-                                      </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
+
                               <div className="grid gap-3">
-                                <Label htmlFor="promo" className="text-base">
+                                <Label htmlFor="promo" className="lg:text-base">
                                   Last Promotion Date
                                 </Label>
                                 <Popover>
@@ -815,12 +732,75 @@ const FormPage = () => {
                                   </PopoverContent>
                                 </Popover>
                               </div>
+
+                              <FormField
+                                control={form.control}
+                                name="type_of_employment"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel className="lg:text-base">
+                                      Type of Employment
+                                    </FormLabel>
+                                    <Select
+                                      onValueChange={(selectedValue) =>
+                                        setEmploymentType(selectedValue)
+                                      }
+                                      defaultValue={field.value}
+                                    >
+                                      <FormControl>
+                                        <SelectTrigger className="w-full">
+                                          <SelectValue placeholder="Select your type of employment" />
+                                        </SelectTrigger>
+                                      </FormControl>
+                                      <SelectContent>
+                                        <SelectGroup>
+                                          <SelectLabel>
+                                            Employment Type
+                                          </SelectLabel>
+                                          {employmentTypes.map((type) => (
+                                            <SelectItem
+                                              key={type.value}
+                                              value={type.value}
+                                              className="text-base"
+                                            >
+                                              {type.name}
+                                            </SelectItem>
+                                          ))}
+                                        </SelectGroup>
+                                      </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+                              {employmentType === "Others" && (
+                                <FormField
+                                  control={form.control}
+                                  name="type_of_employment"
+                                  render={({ field }) => (
+                                    <FormItem>
+                                      <FormLabel className="lg:text-base">
+                                        Others Type of Employment
+                                      </FormLabel>
+                                      <FormControl>
+                                        <Input
+                                          placeholder="Other Type of Employment"
+                                          {...field}
+                                          className="lg:text-base"
+                                        />
+                                      </FormControl>
+                                      <FormMessage />
+                                    </FormItem>
+                                  )}
+                                />
+                              )}
+
                               <FormField
                                 control={form.control}
                                 name="academic_qualification"
                                 render={({ field }) => (
                                   <FormItem>
-                                    <FormLabel>
+                                    <FormLabel className="lg:text-base">
                                       Academic Qualification
                                     </FormLabel>
                                     <Select
@@ -851,126 +831,65 @@ const FormPage = () => {
                                   </FormItem>
                                 )}
                               />
+
                               <FormField
                                 control={form.control}
                                 name="professional_qualification"
                                 render={({ field }) => (
-                                  <FormItem>
+                                  <FormItem className="space-y-3">
                                     <FormLabel className="lg:text-base">
                                       Professional Qualification
                                     </FormLabel>
                                     <FormControl>
+                                      <RadioGroup
+                                        onValueChange={field.onChange}
+                                        defaultValue={field.value}
+                                        className="flex space-x-1"
+                                      >
+                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                          <FormControl>
+                                            <RadioGroupItem value="Yes" />
+                                          </FormControl>
+                                          <FormLabel className="font-normal">
+                                            Yes
+                                          </FormLabel>
+                                        </FormItem>
+                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                          <FormControl>
+                                            <RadioGroupItem value="No" />
+                                          </FormControl>
+                                          <FormLabel className="font-normal">
+                                            No
+                                          </FormLabel>
+                                        </FormItem>
+                                      </RadioGroup>
+                                    </FormControl>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+
+                              <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel className="lg:text-base">
+                                      Email (Optional)
+                                    </FormLabel>
+                                    <FormControl>
                                       <Input
-                                        placeholder="Enter your Professional qualification"
+                                        placeholder="Enter your Email"
                                         {...field}
                                         className="lg:text-base"
+                                        type="email"
                                       />
                                     </FormControl>
                                     <FormMessage />
                                   </FormItem>
                                 )}
                               />
-                              <FormField
-                                control={form.control}
-                                name="type_of_employment"
-                                render={({ field }) => (
-                                  <FormItem>
-                                    <FormLabel className="text-base">
-                                      Type of Employment
-                                    </FormLabel>
-                                    <Select
-                                      onValueChange={field.onChange}
-                                      defaultValue={field.value}
-                                    >
-                                      <FormControl>
-                                        <SelectTrigger className="w-full">
-                                          <SelectValue placeholder="Select your type of employment" />
-                                        </SelectTrigger>
-                                      </FormControl>
-                                      <SelectContent>
-                                        <SelectGroup>
-                                          <SelectLabel>
-                                            Employment Type
-                                          </SelectLabel>
-                                          {employmentTypes.map((type) => (
-                                            <SelectItem
-                                              key={type.value}
-                                              value={type.value}
-                                              className="text-base"
-                                            >
-                                              {type.name}
-                                            </SelectItem>
-                                          ))}
-                                        </SelectGroup>
-                                      </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
-                              <FormField
-                                control={form.control}
-                                name="challenges"
-                                render={({ field }) => (
-                                  <FormItem>
-                                    <FormLabel>Challlenges</FormLabel>
-                                    <FormControl>
-                                      <Textarea
-                                        placeholder="In Your View, What do you consider to be the most significant challenges confronting the university?"
-                                        className="resize-none"
-                                        {...field}
-                                      />
-                                    </FormControl>
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
-                              <FormField
-                                control={form.control}
-                                name="recommendations"
-                                render={({ field }) => (
-                                  <FormItem>
-                                    <FormLabel>Recommendations</FormLabel>
-                                    <FormControl>
-                                      <Textarea
-                                        placeholder="What Recommendations do you Propose for Addressing these Challenges?"
-                                        className="resize-none"
-                                        {...field}
-                                      />
-                                    </FormControl>
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
-                              <FormField
-                                control={form.control}
-                                name="job_description"
-                                render={({ field }) => (
-                                  <FormItem>
-                                    <FormLabel>Job Description</FormLabel>
-                                    <Select
-                                      onValueChange={field.onChange}
-                                      defaultValue={field.value}
-                                    >
-                                      <FormControl>
-                                        <SelectTrigger className="w-full">
-                                          <SelectValue placeholder="Select a Job Description" />
-                                        </SelectTrigger>
-                                      </FormControl>
-                                      <SelectContent>
-                                        <SelectGroup>
-                                          <SelectItem value="yes">
-                                            Yes
-                                          </SelectItem>
-                                          <SelectItem value="no">No</SelectItem>
-                                        </SelectGroup>
-                                      </SelectContent>
-                                    </Select>
 
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
                               <Button
                                 type="submit"
                                 className="w-full font-headingFont lg:text-lg"
