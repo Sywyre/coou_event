@@ -31,16 +31,6 @@ import { academicQualification, base, employmentTypes, states } from "@/utils";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -101,10 +91,6 @@ const FormPage = () => {
   const { ninDetails } = useNinStore();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [date, setDate] = useState<Date>();
-  const [dutyDate, setDutyDate] = useState<Date>();
-  const [employmentDate, setEmploymentDate] = useState<Date>();
-  const [lastPromoDate, setLastPromoDate] = useState<Date>();
   const [isTeaching, setIsTeaching] = useState("");
   const [employmentType, setEmploymentType] = useState("");
 
