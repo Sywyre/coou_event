@@ -136,46 +136,46 @@ const LandingPage = () => {
                           </DialogHeader>
                           <div className="grid font-bodyFont">
                             <div className="flex items-center">
-                              <ul>
-                                <li className="font-semibold">
-                                  NIN: <span className="text-md">{nin}</span>
+                              <ul className="font-medium">
+                                <li>
+                                  NIN: <span className="text-sm">{nin}</span>
                                 </li>
-                                <li className="font-semibold">
+                                <li>
                                   Surname:{" "}
-                                  <span className="text-md">
+                                  <span className="text-sm">
                                     {ninDetails.last_name}
                                   </span>
                                 </li>
-                                <li className="font-semibold">
+                                <li>
                                   Other name:{" "}
-                                  <span className="text-md">
+                                  <span className="text-sm">
                                     {ninDetails.first_name}{" "}
                                     {ninDetails.middle_name}
                                   </span>
                                 </li>
-                                <li className="font-semibold">
+                                <li>
                                   Phone number:{" "}
-                                  <span className="text-md">
+                                  <span className="text-sm">
                                     {ninDetails.phone_number}
                                   </span>
                                 </li>
-                                <li className="font-semibold">
+                                <li>
                                   DoB:
-                                  <span className="text-md">
+                                  <span className="text-sm">
                                     {" "}
                                     {ninDetails.date_of_birth}
                                   </span>
                                 </li>
-                                <li className="font-semibold">
+                                <li>
                                   Gender:
-                                  <span className="text-md">
+                                  <span className="text-sm">
                                     {" "}
                                     {ninDetails.gender}
                                   </span>
                                 </li>
                               </ul>
                               <img
-                                className="self-start w-[150px] h-[150px]"
+                                className="self-start w-[100px] h-[100px] sm:w-[150px] sm:h-[150px]"
                                 src={`data:image/jpeg;base64,${ninDetails.photo}`}
                               />
                             </div>

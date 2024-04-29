@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -86,11 +85,11 @@ const IndividualEntry = () => {
             content={reactToPrintContent}
           />
         </CardHeader>
-        <CardContent className="p-6 text-base">
-          <div className="grid gap-3">
+        <CardContent className="px-6 py-2 text-base">
+          <div className="grid gap-2">
             <div className="font-bold text-lg">Personal Details</div>
             <div className="grid grid-cols-2">
-              <ul className="grid gap-3 font-medium">
+              <ul className="grid gap-3 font-medium text-sm">
                 <li>Surname: {individualData?.surname}</li>
                 <li>Other Names: {individualData?.other_names}</li>
                 <li>Date of Birth: {individualData?.dob}</li>
@@ -109,20 +108,25 @@ const IndividualEntry = () => {
                 <li>Town: {individualData?.town}</li>
               </ul>
               <div className="flex gap-2">
-                <img
-                  src={individualData?.captured_img}
-                  className="self-start w-[200px] h-[200px] rounded-sm"
-                  alt="Screenshot"
-                />
-                <img
-                  className="self-start w-[200px] h-[200px] rounded-sm"
-                  src={`data:image/jpeg;base64,${ninDetails.photo}`}
-                />
+                {individualData?.captured_img && (
+                  <img
+                    src={individualData?.captured_img}
+                    className="self-start w-[200px] h-[200px] rounded-sm"
+                    alt="Screenshot"
+                  />
+                )}
+
+                {ninDetails.photo && (
+                  <img
+                    className="self-start w-[200px] h-[200px] rounded-sm"
+                    src={`data:image/jpeg;base64,${ninDetails.photo}`}
+                  />
+                )}
               </div>
             </div>
-            <Separator className="my-2" />
+            <Separator className="my-1" />
             <div className="font-bold text-lg">Employment Details</div>
-            <ul className="grid gap-3 font-medium">
+            <ul className="grid gap-2 font-medium">
               <li>Staff ID: {individualData?.staff_id}</li>
               <li>Teaching Staff: {individualData?.staff_id}</li>
               <li>
@@ -166,11 +170,7 @@ const IndividualEntry = () => {
               </li>
             </ul>
           </div>
-          <Separator className="my-4" />
         </CardContent>
-        <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
-          <div className="text-xs text-muted-foreground"></div>
-        </CardFooter>
       </Card>
     </div>
   );
