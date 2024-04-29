@@ -75,6 +75,7 @@ const schema = z.object({
     .max(50),
   email: z.string().email(),
   nin: z.string(),
+  dob: z.string(),
   phoneNumber: z.string(),
   gender: z.string(),
   address: z.string(),
@@ -85,8 +86,11 @@ const schema = z.object({
   faculty: z.string(),
   department: z.string(),
   unit: z.string(),
+  dutyDate: z.string(),
+  employmentDate: z.string(),
   present_rank: z.string(),
   grade_level: z.string(),
+  lastPromoDate: z.string(),
   academic_qualification: z.string(),
   professional_qualification: z.string(),
   type_of_employment: z.string(),
@@ -103,10 +107,10 @@ const FormPage = () => {
   const { ninDetails } = useNinStore();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [date, setDate] = useState<Date>();
-  const [dutyDate, setDutyDate] = useState<Date>();
-  const [employmentDate, setEmploymentDate] = useState<Date>();
-  const [lastPromoDate, setLastPromoDate] = useState<Date>();
+  // const [date, setDate] = useState<Date>();
+  // const [dutyDate, setDutyDate] = useState<Date>();
+  // const [employmentDate, setEmploymentDate] = useState<Date>();
+  // const [lastPromoDate, setLastPromoDate] = useState<Date>();
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -121,6 +125,9 @@ const FormPage = () => {
       gender: `${ninDetails.gender == undefined ? "" : ninDetails.gender}`,
       phoneNumber: `${
         ninDetails.phone_number == undefined ? "" : ninDetails.phone_number
+      }`,
+      dob: `${
+        ninDetails.date_of_birth == undefined ? "" : ninDetails.date_of_birth
       }`,
     },
   });
@@ -138,7 +145,7 @@ const FormPage = () => {
       is_captured: 'false',
       phone_number: values.phoneNumber,
       gender: values.gender,
-      dob: date?.toDateString(),
+      dob: values.dob,
       contact_address: values.address,
       state_of_origin: values.state,
       lga: values.lga,
@@ -147,11 +154,11 @@ const FormPage = () => {
       faculty: values.faculty,
       department: values.department,
       unit: values.unit,
-      date_of_assumption_of_duty: dutyDate?.toDateString(),
-      date_of_confirmation_of_employment: employmentDate?.toDateString(),
+      date_of_assumption_of_duty: values.dutyDate,
+      date_of_confirmation_of_employment: values.employmentDate,
       present_rank: values.present_rank,
       grade_level: values.grade_level,
-      last_promotion_date: lastPromoDate?.toDateString(),
+      last_promotion_date: values.lastPromoDate,
       academic_qualification: values.academic_qualification,
       professional_qualification: values.professional_qualification,
       type_of_employment: values.type_of_employment,
@@ -181,12 +188,12 @@ const FormPage = () => {
         records?.forEach(function () {
           //reset();
         });
+        setIsLoading(false);
+        navigate("/");
         toast({
           title: "Congrats🎉",
           description: `Submitted Successfully`,
         });
-        setIsLoading(false);
-        setTimeout(() => navigate("/"), 3000);
       }
     );
   };
@@ -312,44 +319,26 @@ const FormPage = () => {
                                   </FormItem>
                                 )}
                               />
-                              <div className="grid gap-3">
-                                <Label htmlFor="dob" className="text-base">
-                                  Date of Birth
-                                </Label>
-                                <Popover>
-                                  <PopoverTrigger asChild>
-                                    <FormControl id="dob" className="!w-full">
-                                      <Button
-                                        variant={"outline"}
-                                        className={cn(
-                                          "w-[240px] justify-start text-left font-normal",
-                                          !date && "text-muted-foreground"
-                                        )}
-                                      >
-                                        <CalendarIcon className="mr-2 h-4 w-4" />
-                                        {date ? (
-                                          format(date, "PPP")
-                                        ) : (
-                                          <span>Pick a date</span>
-                                        )}
-                                      </Button>
+                              <FormField
+                                control={form.control}
+                                name="dob"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel className="lg:text-base">
+                                    Date of Birth
+                                    </FormLabel>
+                                    <FormControl>
+                                      <Input
+                                        placeholder="Enter date of birth"
+                                        {...field}
+                                        className="lg:text-base"
+                                        readOnly={ninDetails?.date_of_birth?.length > 1}
+                                      />
                                     </FormControl>
-                                  </PopoverTrigger>
-                                  <PopoverContent
-                                    align="start"
-                                    className=" w-auto p-0"
-                                  >
-                                    <Calendar
-                                      mode="single"
-                                      captionLayout="dropdown-buttons"
-                                      selected={date}
-                                      onSelect={setDate}
-                                      fromYear={1960}
-                                      toYear={2030}
-                                    />
-                                  </PopoverContent>
-                                </Popover>
-                              </div>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
                               <FormField
                                 control={form.control}
                                 name="gender"
@@ -611,83 +600,47 @@ const FormPage = () => {
                                   </FormItem>
                                 )}
                               />
-                              <div className="grid gap-3">
-                                <Label htmlFor="dod" className="text-base">
-                                  Date of Assumption of Duty
-                                </Label>
-                                <Popover>
-                                  <PopoverTrigger asChild>
-                                    <FormControl id="dod" className="!w-full">
-                                      <Button
-                                        variant={"outline"}
-                                        className={cn(
-                                          "w-[240px] justify-start text-left font-normal",
-                                          !dutyDate && "text-muted-foreground"
-                                        )}
-                                      >
-                                        <CalendarIcon className="mr-2 h-4 w-4" />
-                                        {dutyDate ? (
-                                          format(dutyDate, "PPP")
-                                        ) : (
-                                          <span>Pick a date</span>
-                                        )}
-                                      </Button>
+
+                              <FormField
+                                control={form.control}
+                                name="dutyDate"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel className="lg:text-base">
+                                    Date of Assumption of Duty
+                                    </FormLabel>
+                                    <FormControl>
+                                      <Input
+                                        placeholder="Enter Date of Assumption of Duty"
+                                        {...field}
+                                        className="lg:text-base"
+                                      />
                                     </FormControl>
-                                  </PopoverTrigger>
-                                  <PopoverContent
-                                    align="start"
-                                    className=" w-auto p-0"
-                                  >
-                                    <Calendar
-                                      mode="single"
-                                      captionLayout="dropdown-buttons"
-                                      selected={dutyDate}
-                                      onSelect={setDutyDate}
-                                      fromYear={1950}
-                                      toYear={2030}
-                                    />
-                                  </PopoverContent>
-                                </Popover>
-                              </div>
-                              <div className="grid gap-3">
-                                <Label htmlFor="doe" className="text-base">
-                                  Date of Confirmation of Employment
-                                </Label>
-                                <Popover>
-                                  <PopoverTrigger asChild>
-                                    <FormControl id="doe" className="!w-full">
-                                      <Button
-                                        variant={"outline"}
-                                        className={cn(
-                                          "w-[240px] justify-start text-left font-normal",
-                                          !employmentDate &&
-                                            "text-muted-foreground"
-                                        )}
-                                      >
-                                        <CalendarIcon className="mr-2 h-4 w-4" />
-                                        {employmentDate ? (
-                                          format(employmentDate, "PPP")
-                                        ) : (
-                                          <span>Pick a date</span>
-                                        )}
-                                      </Button>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+
+                              <FormField
+                                control={form.control}
+                                name="employmentDate"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel className="lg:text-base">
+                                    Date of Confirmation of Employment
+                                    </FormLabel>
+                                    <FormControl>
+                                      <Input
+                                        placeholder="Enter Date of Confirmation of Employment"
+                                        {...field}
+                                        className="lg:text-base"
+                                      />
                                     </FormControl>
-                                  </PopoverTrigger>
-                                  <PopoverContent
-                                    align="start"
-                                    className=" w-auto p-0"
-                                  >
-                                    <Calendar
-                                      mode="single"
-                                      captionLayout="dropdown-buttons"
-                                      selected={employmentDate}
-                                      onSelect={setEmploymentDate}
-                                      fromYear={1960}
-                                      toYear={2030}
-                                    />
-                                  </PopoverContent>
-                                </Popover>
-                              </div>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+
                               <FormField
                                 control={form.control}
                                 name="present_rank"
@@ -776,45 +729,27 @@ const FormPage = () => {
                                   </FormItem>
                                 )}
                               />
-                              <div className="grid gap-3">
-                                <Label htmlFor="promo" className="text-base">
-                                  Last Promotion Date
-                                </Label>
-                                <Popover>
-                                  <PopoverTrigger asChild>
-                                    <FormControl id="promo" className="!w-full">
-                                      <Button
-                                        variant={"outline"}
-                                        className={cn(
-                                          "w-[240px] justify-start text-left font-normal",
-                                          !lastPromoDate &&
-                                            "text-muted-foreground"
-                                        )}
-                                      >
-                                        <CalendarIcon className="mr-2 h-4 w-4" />
-                                        {lastPromoDate ? (
-                                          format(lastPromoDate, "PPP")
-                                        ) : (
-                                          <span>Pick a date</span>
-                                        )}
-                                      </Button>
+
+                              <FormField
+                                control={form.control}
+                                name="lastPromoDate"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel className="lg:text-base">
+                                    Last Promotion Date
+                                    </FormLabel>
+                                    <FormControl>
+                                      <Input
+                                        placeholder="Enter Date of Last Promotion"
+                                        {...field}
+                                        className="lg:text-base"
+                                      />
                                     </FormControl>
-                                  </PopoverTrigger>
-                                  <PopoverContent
-                                    align="start"
-                                    className=" w-auto p-0"
-                                  >
-                                    <Calendar
-                                      mode="single"
-                                      captionLayout="dropdown-buttons"
-                                      selected={lastPromoDate}
-                                      onSelect={setLastPromoDate}
-                                      fromYear={1950}
-                                      toYear={2030}
-                                    />
-                                  </PopoverContent>
-                                </Popover>
-                              </div>
+                                    <FormMessage />
+                                  </FormItem>
+                                )}
+                              />
+
                               <FormField
                                 control={form.control}
                                 name="academic_qualification"
