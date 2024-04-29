@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -8,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useSearch } from "@/stores";
 import { base } from "@/utils";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -23,7 +25,9 @@ interface FormDetails {
 
 const ViewEntry = () => {
   const [allFormDetails, setAllFormDetails] = useState<any>();
+  const {query} = useSearch();
 
+  const result = allFormDetails?.filter((data: any) => data.fields.surname.toLowerCase().includes(query?.toLowerCase()) || data.fields.nin.includes(query));
 
   useEffect(() => {
     base(import.meta.env.VITE_AIRTABLE_TABLE)
@@ -43,6 +47,13 @@ const ViewEntry = () => {
       </p>
     );
 
+  if (result?.length === 0)
+    return (
+      <p className="text-muted-foreground text-center my-2 text-xs">
+        Result not found
+      </p>
+    );
+
   return (
     <div>
       <Table>
@@ -57,7 +68,7 @@ const ViewEntry = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {allFormDetails?.map((data: any | FormDetails) => (
+          {result?.map((data: any | FormDetails) => (
             <TableRow key={data.id}>
               <TableCell className="font-medium p-0 h-[71.33px]">
                 <Link

@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-
+import useNinStore from "@/stores";
 
 interface RecordData {
   surname: string;
@@ -40,8 +40,9 @@ interface RecordData {
 const IndividualEntry = () => {
   const param = useParams();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [individualData, setIndividualData] = useState<any | RecordData>();
-
+  const { ninDetails } = useNinStore();
 
   useEffect(() => {
     base(import.meta.env.VITE_AIRTABLE_TABLE).find(
@@ -54,6 +55,7 @@ const IndividualEntry = () => {
         setIndividualData(record?.fields);
       }
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -87,10 +89,20 @@ const IndividualEntry = () => {
                 <li>LGA: {individualData?.lga}</li>
                 <li>Town: {individualData?.town}</li>
               </ul>
-              <img src={individualData?.captured_img} className="self-start w-[300px]" alt="Screenshot" />
+              <div className="flex gap-2">
+                <img
+                  src={individualData?.captured_img}
+                  className="self-start w-[200px] h-[200px] rounded-sm"
+                  alt="Screenshot"
+                />
+                <img
+                  className="self-start w-[200px] h-[200px] rounded-sm"
+                  src={`data:image/jpeg;base64,${ninDetails.photo}`}
+                />
+              </div>
             </div>
             <Separator className="my-2" />
-            <ul className="grid gap-3 font-medium bg-muted/60">
+            <ul className="grid gap-3 font-medium">
               <div className="font-semibold text-lg">Employment Details</div>
               <li>Staff ID: {individualData?.staff_id}</li>
               <li>Faculty: {individualData?.faculty}</li>
@@ -120,26 +132,6 @@ const IndividualEntry = () => {
             </ul>
           </div>
           <Separator className="my-4" />
-          <div className="grid gap-4">
-            <div className="grid gap-3">
-              <div className="font-semibold text-lg">
-                Challenges the University is Facing
-              </div>
-              <div className="font-semibold">{individualData?.challenges}</div>
-            </div>
-            <div className="grid auto-rows-max gap-3">
-              <div className="font-semibold text-lg">
-                Recommendation on how to fix the Challenges
-              </div>
-              <div>{individualData?.recommendations}</div>
-            </div>
-            <div className="grid auto-rows-max gap-3">
-              <div className="font-semibold text-lg">
-                I have my Job Description
-              </div>
-              <div>{individualData?.job_description}</div>
-            </div>
-          </div>
         </CardContent>
         <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
           <div className="text-xs text-muted-foreground"></div>
