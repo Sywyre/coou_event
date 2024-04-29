@@ -75,7 +75,7 @@ const IndividualEntry = () => {
               {individualData?.nin_is_valid}
             </CardTitle>
             <CardDescription>
-              This entry was made on {individualData?.date_filled}
+              This entry was made on {individualData?.date_filled} by {individualData?.admin_email}
             </CardDescription>
           </div>
           <ReactToPrint
