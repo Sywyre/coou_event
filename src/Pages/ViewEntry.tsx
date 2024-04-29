@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import ViewEntrySkeleton from "@/components/ViewEntrySkeleton";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useSearch } from "@/stores";
-import { base, levels } from "@/utils";
+import { base } from "@/utils";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -62,59 +62,7 @@ const ViewEntry = () => {
       </p>
     );
 
-  if (isLoading)
-    return (
-      <div className="space-y-2 mt-3">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>
-                <Skeleton className="h-8 w-auto" />
-              </TableHead>
-              <TableHead>
-                <Skeleton className="h-8 w-auto" />
-              </TableHead>
-              <TableHead>
-                <Skeleton className="h-8 w-auto" />
-              </TableHead>
-              <TableHead>
-                <Skeleton className="h-8 w-auto" />
-              </TableHead>
-              <TableHead>
-                <Skeleton className="h-8 w-auto" />
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {levels?.map((data: any | FormDetails) => (
-              <TableRow key={data.id}>
-                <TableCell className="font-medium p-0 h-[71.33px]">
-                  <Skeleton className="h-8 w-auto" />
-                </TableCell>
-                <TableCell className="p-0 h-[71.33px]">
-                  <Skeleton className="h-8 w-auto" />
-                </TableCell>
-                <TableCell className="p-0 h-[71.33px]">
-                  <Skeleton className="h-8 w-auto" />
-                </TableCell>
-                <TableCell className="p-0 h-[71.33px]">
-                  <Skeleton className="h-8 w-auto" />
-                </TableCell>
-                <TableCell className="p-0 h-[71.33px]">
-                  <Skeleton className="h-8 w-auto" />
-                </TableCell>
-                {/* <TableCell>
-                <Button disabled>Verify</Button>
-              </TableCell> */}
-                <TableCell>
-                  <Skeleton className="h-8 w-auto" />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-    );
+  if (isLoading) return <ViewEntrySkeleton />;
 
   return (
     <div>
