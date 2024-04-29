@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -10,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useSearch } from "@/stores";
-import { base } from "@/utils";
+import { base, levels } from "@/utils";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -25,11 +26,17 @@ interface FormDetails {
 
 const ViewEntry = () => {
   const [allFormDetails, setAllFormDetails] = useState<any>();
-  const {query} = useSearch();
+  const [isLoading, setIsLoading] = useState(false);
+  const { query } = useSearch();
 
-  const result = allFormDetails?.filter((data: any) => data.fields.surname.toLowerCase().includes(query?.toLowerCase()) || data.fields.nin.includes(query));
+  const result = allFormDetails?.filter(
+    (data: any) =>
+      data.fields.surname.toLowerCase().includes(query?.toLowerCase()) ||
+      data.fields.nin.includes(query)
+  );
 
   useEffect(() => {
+    setIsLoading(true);
     base(import.meta.env.VITE_AIRTABLE_TABLE)
       .select({ view: "Grid view" })
       .eachPage((records, fetchNextPage) => {
@@ -37,6 +44,7 @@ const ViewEntry = () => {
           records.map((record) => ({ id: record.id, fields: record.fields }))
         );
         fetchNextPage();
+        setIsLoading(false);
       });
   }, []);
 
@@ -52,6 +60,60 @@ const ViewEntry = () => {
       <p className="text-muted-foreground text-center my-2 text-xs">
         Result not found
       </p>
+    );
+
+  if (isLoading)
+    return (
+      <div className="space-y-2 mt-3">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>
+                <Skeleton className="h-8 w-auto" />
+              </TableHead>
+              <TableHead>
+                <Skeleton className="h-8 w-auto" />
+              </TableHead>
+              <TableHead>
+                <Skeleton className="h-8 w-auto" />
+              </TableHead>
+              <TableHead>
+                <Skeleton className="h-8 w-auto" />
+              </TableHead>
+              <TableHead>
+                <Skeleton className="h-8 w-auto" />
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {levels?.map((data: any | FormDetails) => (
+              <TableRow key={data.id}>
+                <TableCell className="font-medium p-0 h-[71.33px]">
+                  <Skeleton className="h-8 w-auto" />
+                </TableCell>
+                <TableCell className="p-0 h-[71.33px]">
+                  <Skeleton className="h-8 w-auto" />
+                </TableCell>
+                <TableCell className="p-0 h-[71.33px]">
+                  <Skeleton className="h-8 w-auto" />
+                </TableCell>
+                <TableCell className="p-0 h-[71.33px]">
+                  <Skeleton className="h-8 w-auto" />
+                </TableCell>
+                <TableCell className="p-0 h-[71.33px]">
+                  <Skeleton className="h-8 w-auto" />
+                </TableCell>
+                {/* <TableCell>
+                <Button disabled>Verify</Button>
+              </TableCell> */}
+                <TableCell>
+                  <Skeleton className="h-8 w-auto" />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     );
 
   return (
@@ -115,7 +177,9 @@ const ViewEntry = () => {
               </TableCell> */}
               <TableCell>
                 <Link to={`/camera/${data.id}`}>
-                  <Button disabled={data.fields.is_captured == 'true'}>{data.fields.is_captured == 'true' ? 'Captured' : 'Capture'}</Button>
+                  <Button disabled={data.fields.is_captured == "true"}>
+                    {data.fields.is_captured == "true" ? "Captured" : "Capture"}
+                  </Button>
                 </Link>
               </TableCell>
             </TableRow>
