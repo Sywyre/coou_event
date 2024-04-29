@@ -1,5 +1,5 @@
 import { base } from "@/utils";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   Card,
@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import useNinStore from "@/stores";
+import { ReactToPrint } from "react-to-print";
+import { Button } from "@/components/ui/button";
 
 interface RecordData {
   surname: string;
@@ -58,10 +60,16 @@ const IndividualEntry = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const componentRef = useRef<HTMLDivElement>(null);
+  const reactToPrintContent = useCallback(() => {
+    return componentRef.current;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [componentRef.current]);
+
   return (
-    <div>
+    <div ref={componentRef}>
       <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
-        <CardHeader className="flex flex-row items-start bg-muted/50">
+        <CardHeader className="flex flex-row justify-between items-start bg-muted/50">
           <div className="grid gap-0.5">
             <CardTitle className="group flex items-center gap-2 text-lg">
               {individualData?.surname}
@@ -71,16 +79,27 @@ const IndividualEntry = () => {
               This entry was made on {individualData?.date_filled}
             </CardDescription>
           </div>
+          <ReactToPrint
+            trigger={() => {
+              return <Button>Print</Button>;
+            }}
+            content={reactToPrintContent}
+          />
         </CardHeader>
         <CardContent className="p-6 text-base">
           <div className="grid gap-3">
-            <div className="font-semibold text-lg">Personal Details</div>
+            <div className="font-bold text-lg">Personal Details</div>
             <div className="grid grid-cols-2">
               <ul className="grid gap-3 font-medium">
                 <li>Surname: {individualData?.surname}</li>
                 <li>Other Names: {individualData?.other_names}</li>
                 <li>Date of Birth: {individualData?.dob}</li>
-                <li>Email: {individualData?.email}</li>
+                <li>
+                  Email:{" "}
+                  {individualData?.email
+                    ? individualData?.email
+                    : "No Email was provided"}
+                </li>
                 <li>NIN: {individualData?.nin}</li>
                 <li>Phone Number: {individualData?.phone_number}</li>
                 <li>Gender: {individualData?.gender}</li>
@@ -102,12 +121,23 @@ const IndividualEntry = () => {
               </div>
             </div>
             <Separator className="my-2" />
+            <div className="font-bold text-lg">Employment Details</div>
             <ul className="grid gap-3 font-medium">
-              <div className="font-semibold text-lg">Employment Details</div>
               <li>Staff ID: {individualData?.staff_id}</li>
-              <li>Faculty: {individualData?.faculty}</li>
+              <li>Teaching Staff: {individualData?.staff_id}</li>
+              <li>
+                Faculty:{" "}
+                {individualData?.faculty
+                  ? individualData?.faculty
+                  : "This is a non teaching staff"}
+              </li>
               <li>Department: {individualData?.department}</li>
-              <li>Unit: {individualData?.unit}</li>
+              <li>
+                Unit:{" "}
+                {individualData?.unit
+                  ? individualData?.unit
+                  : "This is a teaching staff"}
+              </li>
               <li>
                 Date of Assumption of Duty:{" "}
                 {individualData?.date_of_assumption_of_duty}
@@ -117,7 +147,6 @@ const IndividualEntry = () => {
                 {individualData?.date_of_confirmation_of_employment}
               </li>
               <li>Present Rank: {individualData?.present_rank}</li>
-              <li>Grade Level: {individualData?.grade_level}</li>
               <li>
                 Last Promotion Date: {individualData?.last_promotion_date}
               </li>
@@ -129,6 +158,12 @@ const IndividualEntry = () => {
                 {individualData?.professional_qualification}
               </li>
               <li>Type of Employment: {individualData?.type_of_employment}</li>
+              <li>
+                Other type of Employment:{" "}
+                {individualData?.other_type_of_employment
+                  ? individualData?.other_type_of_employment
+                  : "There is no other "}
+              </li>
             </ul>
           </div>
           <Separator className="my-4" />
