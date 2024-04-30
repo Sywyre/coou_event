@@ -38,7 +38,7 @@ const ViewEntry = () => {
   useEffect(() => {
     setIsLoading(true);
     const fetchRecords = () => {
-      const recordsArray = [];
+      const recordsArray: { id: string; fields: any }[] = [];
       base(import.meta.env.VITE_AIRTABLE_TABLE)
         .select({ view: "Grid view" })
         .eachPage(
