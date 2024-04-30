@@ -37,15 +37,28 @@ const ViewEntry = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    base(import.meta.env.VITE_AIRTABLE_TABLE)
-      .select({ view: "Grid view" })
-      .eachPage((records, fetchNextPage) => {
-        setAllFormDetails(
-          records.map((record) => ({ id: record.id, fields: record.fields }))
+    const fetchRecords = () => {
+      const recordsArray = [];
+      base(import.meta.env.VITE_AIRTABLE_TABLE)
+        .select({ view: "Grid view" })
+        .eachPage(
+          (records, fetchNextPage) => {
+            recordsArray.push(...records.map(record => ({ id: record.id, fields: record.fields })));
+            fetchNextPage();
+          },
+          (err) => {
+            if (err) {
+              console.error("Error fetching records:", err);
+              setIsLoading(false);
+              return;
+            }
+            // After fetching all pages, set the state with all records
+            setAllFormDetails(recordsArray);
+            setIsLoading(false);
+          }
         );
-        fetchNextPage();
-        setIsLoading(false);
-      });
+    };
+    fetchRecords();
   }, []);
 
   if (allFormDetails?.length === 0)
